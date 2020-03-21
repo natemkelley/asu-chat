@@ -1,0 +1,329 @@
+<template>
+  <div class="page">
+    <div class="loader" v-show="loading"><RotateSquare2 /></div>
+
+    <div v-show="!loading" class="container chart-area z-depth-1">
+<div class="sidepanel" v-if="robot">
+      <div class="session-name z-depth-1">
+      <h5>{{sessionName}}</h5>
+    </div>
+      <div class="close-session z-depth-1" >
+      <a
+        @click="closeSession"
+        class="btn waves-effect waves-light red darken-1 btn-small"
+        >End Session</a
+      >
+      <p>
+        When you end the session you will be redirected to a page where you can
+        export your data .
+      </p>
+    </div>
+</div>
+
+      <ul
+        class="messages"
+        v-chat-scroll="{ always: true, smooth: true, scrollonremoved: true }"
+      >
+        <li class="message" :key="message + n" v-for="(message, n) in messages">
+          <div class="row robot" v-if="message.sender == 'Robot'">
+            <div class="robot-img">
+              <img
+                src="https://images.assetsdelivery.com/compings_v2/ppbig/ppbig1904/ppbig190403249.jpg"
+                alt=""
+                class="responsive-img circle"
+              />
+            </div>
+            <div class="text">{{ message.message }}</div>
+          </div>
+
+          <div class="row me" v-if="message.sender == 'Navigator'">
+            <div class="text">{{ message.message }}</div>
+          </div>
+        </li>
+
+        <li class="message typing" v-show="robotTyping || navigatorTyping">
+          <div class="row robot" v-show="robotTyping && !robot">
+            <div class="robot-img">
+              <img
+                src="https://images.assetsdelivery.com/compings_v2/ppbig/ppbig1904/ppbig190403249.jpg"
+                alt=""
+                class="responsive-img circle"
+              />
+            </div>
+            <div class="loading-btns">
+              <img
+                class="responsive-img"
+                src="https://media0.giphy.com/media/12yixaK3jASpb2/source.gif"
+              />
+            </div>
+          </div>
+          <div class="row me" v-show="navigatorTyping && robot">
+            <div class="loading-btns">
+              <img
+                class="responsive-img"
+                src="https://media0.giphy.com/media/12yixaK3jASpb2/source.gif"
+              />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+    <div v-show="!loading && !observe" class="container typing-area z-depth-2">
+      <div class="row">
+        <textarea
+          @keydown="updateTyping"
+          v-model="textarea"
+          v-on:keyup.enter="sendMessage"
+        ></textarea>
+      </div>
+      <div class="row">
+        <button
+          :class="{ disabled: !textarea }"
+          class="right btn green darken-1 waves-effect waves-light"
+          @click="sendMessage"
+        >
+          Submit
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Vue from "vue";
+import VueChatScroll from "vue-chat-scroll";
+Vue.use(VueChatScroll);
+import { RotateSquare2 } from "@/node_modules/vue-loading-spinner";
+import ThreeCircle from "@/components/threeCircles";
+
+export default {
+  layout: "chat",
+  data() {
+    return {
+      active: false,
+      textarea: null,
+      id: null,
+      loading: true,
+      messages: [],
+      observe: null,
+      robot: null,
+      robotTyping: false,
+      navigatorTyping: false,
+      typing: false,
+      sessionName:'Session Name'
+    };
+  },
+  components: {
+    RotateSquare2,
+    ThreeCircle
+  },
+  async asyncData({ params, error }) {
+    return params;
+  },
+  mounted() {
+    //room
+    this.$fireStore
+      .collection("rooms")
+      .doc(this.id)
+      .onSnapshot(data => {
+        this.sessionName = data.data().roomName
+        this.active = data.data().active;
+        this.loading = false;
+      });
+
+    this.$fireStore
+      .collection("rooms")
+      .doc(this.id)
+      .collection("chats")
+      .orderBy("chatNumber")
+      .onSnapshot(data => {
+        this.messages = [];
+
+        data.docs.forEach(doc => {
+          this.messages.push(doc.data());
+        });
+        this.loading = false;
+      });
+  },
+  methods: {
+    sendMessage() {
+      this.textarea = this.textarea.trim();
+      if (!this.textarea) {
+        M.toast({ html: "Please enter something", classes: "red rounded" });
+        return;
+      }
+
+      //update count
+
+      var updateCount = this.$fireStore.collection("rooms").doc(this.id);
+      this.$fireStore
+        .runTransaction(transaction => {
+          return transaction.get(updateCount).then(function(sfDoc) {
+            if (!sfDoc.exists) {
+              throw "Document does not exist!";
+            }
+
+            var newNum = sfDoc.data().numberOfChat + 1;
+            transaction.update(updateCount, { numberOfChat: newNum });
+            return newNum;
+          });
+        })
+        .then(newCount => {
+          console.log("count increased to ", newCount);
+          let time = new Date().getTime();
+
+          this.$fireStore
+            .collection("rooms")
+            .doc(this.id)
+            .collection("chats")
+            .add({
+              message: this.textarea,
+              chatNumber: newCount,
+              timestamp: time,
+              sender: this.robot ? "Robot" : "Navigator",
+              roomName:this.sessionName
+            });
+
+          this.textarea = null;
+        });
+    },
+    updateTyping() {
+      this.typing = true;
+    },
+    closeSession() {
+      this.$fireStore
+        .collection("rooms")
+        .doc(this.id)
+        .update({
+          active: false
+        })
+        .then(() => {
+          this.$router.push({
+            path: "/admin/pastRooms"
+          });
+        });
+    }
+  },
+  created() {
+    this.observe = this.$route.query.observe;
+    this.robot = this.$route.query.robot;
+  }
+};
+</script>
+
+<style scoped lang="scss">
+.loader {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+  margin-top: 30px;
+}
+.container {
+  max-width: 450px;
+}
+
+.chart-area {
+  position: relative;
+  background: white;
+  margin-top: 5vh;
+  height: 70vh;
+  min-height: 100%;
+  border-radius: 20px;
+}
+
+.messages {
+  min-height: 100%;
+  max-height: 40vh;
+  overflow-y: scroll;
+  font-size: 17px;
+  .message {
+    .row {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.loading-btns {
+  display: inline;
+  width: 100px;
+  margin-top: -17px;
+  margin-left: -5px;
+}
+
+.robot {
+  display: flex;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  .robot-img {
+    max-width: 60px;
+    display: inline;
+  }
+  .text {
+    display: inline-block;
+    padding: 8px 10px;
+    background-color: #dadada;
+    max-width: 70%;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
+}
+
+.me {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0px 20px;
+  .text {
+    display: inline-block;
+    padding: 8px 10px;
+    background-color: #70a2ff;
+    max-width: 70%;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
+}
+
+.typing-area {
+  width: 100%;
+  border-radius: 12px;
+  background: white;
+  margin-top: 15px;
+  padding: 15px;
+  .row {
+    margin-bottom: 3px;
+  }
+  textarea {
+    border: 1px solid rgba(0, 0, 0, 0.155);
+    font-size: 17px;
+  }
+}
+
+.close-session {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 250px;
+      margin-top: 100px;
+  .btn-small {
+    width: 100%;
+  }
+}
+
+.session-name {
+  background: white;
+  border-radius: 15px;
+  position: absolute;
+  padding: 10px;
+  width: 250px;
+  text-align: center;
+}
+
+.sidepanel{
+      position: absolute;
+    margin-left: 470px;
+}
+</style>

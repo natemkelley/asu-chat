@@ -1,0 +1,18 @@
+.push-top{
+    margin-top:70px
+  }
+  .push-top-small{
+    margin-top:30px
+  }
+
+.maroon{
+    background:#ac0101;
+}
+
+.clickable{
+  cursor: pointer;
+}
+
+.btn{
+  border-radius: 10px;
+}
