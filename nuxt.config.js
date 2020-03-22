@@ -53,16 +53,16 @@ export default {
       { 
         config: {
           apiKey: process.env.apiKey,
-          authDomain: process.env.authDomain,
-          databaseURL: process.env.databaseURL,
-          projectId: process.env.projectId,
-          storageBucket: process.env.storageBucket,
+          authDomain: "asu-chat.firebaseapp.com",
+          databaseURL: "https://asu-chat.firebaseio.com",
+          projectId: "asu-chat",
+          storageBucket: "asu-chat.appspot.com",
           messagingSenderId: process.env.messagingSenderId,
           appId: process.env.appId,
           measurementId: process.env.measurementId
         },
         services: {
-          firestore: true // Just as example. Can be any other service.
+          firestore: true 
         }
       }
     ]

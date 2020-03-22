@@ -18,7 +18,9 @@
 </template>
 
 <script>
-import csvDownload from "json-to-csv-export";
+//import csvDownload from "json-to-csv-export";
+import { saveAs } from "file-saver";
+const { Parser } = require("json2csv");
 import moment from "moment";
 
 export default {
@@ -69,13 +71,11 @@ export default {
         data.docs.forEach(doc => {
           allTheData.push(doc.data());
         });
-        let exportName = "dataset_" + pos + ".csv";
-        csvDownload(allTheData, exportName);
 
-        M.toast({
-          html: "Downloaded " + exportName,
-          classes: "green darken-2 rounded"
-        });
+        allTheData = await this.addExtraColumns(allTheData);
+
+        let exportName = allTheData[0].roomName+ ".csv";
+        this.downloadCSV(allTheData, exportName);
       }
 
       this.closeModal();
@@ -100,19 +100,64 @@ export default {
           allTheData.push(doc.data());
         });
       }
-      console.log("end", allTheData);
 
-      let exportName = moment().format("LLLL") + " dataset" + ".csv";
-      csvDownload(allTheData, exportName);
+      allTheData = await this.addExtraColumns(allTheData);
+
+      let exportName = moment().format("LLLL") + " Export" + ".csv";
+      this.downloadCSV(allTheData, exportName);
       this.closeModal();
-      M.toast({
-        html: "Downloaded Document with (" +pos+") Datasets",
-        classes: "green darken-2 rounded"
-      });
     },
     closeModal() {
       var elems = this.$el.querySelectorAll(".modal");
       M.Modal.getInstance(elems[0]).close();
+    },
+    addExtraColumns(data) {
+      return new Promise((resolve, reject) => {
+        data.forEach(obj => {
+          const timestampFormatted = moment(obj.timestamp).format(
+            "M/D/YYYY HH:mm:ss"
+          ); //3/21/2020  3:38:00
+          obj.timestampFormatted = timestampFormatted;
+
+        });
+        resolve(data);
+      });
+    },
+    downloadCSV(data, name) {
+      const fields = [
+        {
+          label: "Formatted Timestamp",
+          value: "timestampFormatted"
+        },
+        { label: "Chat Number", value: "chatNumber" },
+        {
+          label: "Sender",
+          value: "sender"
+        },
+        {
+          label: "Message",
+          value: "message"
+        },
+        {
+          label: "Chat Room Name",
+          value: "roomName"
+        },
+                {
+          label: "Unix Timestamp",
+          value: "timestamp"
+        }
+      ];
+      const json2csvParser = new Parser({ fields });
+      const csv = json2csvParser.parse(data);
+      var file = new File([csv], name, {
+        type: "text/plain;charset=utf-8"
+      });
+      saveAs(file);
+
+      M.toast({
+        html: "Downloaded Dataset",
+        classes: "green darken-2 rounded"
+      });
     }
   }
 };
