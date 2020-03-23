@@ -3,22 +3,22 @@
     <div class="loader" v-show="loading"><RotateSquare2 /></div>
 
     <div v-show="!loading" class="container chart-area z-depth-1">
-<div class="sidepanel" v-if="robot">
-      <div class="session-name z-depth-1">
-      <h5>{{sessionName}}</h5>
-    </div>
-      <div class="close-session z-depth-1" >
-      <a
-        @click="closeSession"
-        class="btn waves-effect waves-light red darken-1 btn-small"
-        >End Session</a
-      >
-      <p>
-        When you end the session you will be redirected to a page where you can
-        export your data .
-      </p>
-    </div>
-</div>
+      <div class="sidepanel" v-if="robot">
+        <div class="session-name z-depth-1">
+          <h5>{{ sessionName }}</h5>
+        </div>
+        <div class="close-session z-depth-1">
+          <a
+            @click="closeSession"
+            class="btn waves-effect waves-light red darken-1 btn-small"
+            >End Session</a
+          >
+          <p>
+            When you end the session you will be redirected to a page where you
+            can export your data .
+          </p>
+        </div>
+      </div>
 
       <ul
         class="messages"
@@ -41,7 +41,7 @@
           </div>
         </li>
 
-        <li class="message typing" v-show="robotTyping || navigatorTyping">
+        <li class="message typing" v-if="robotTyping || navigatorTyping">
           <div class="row robot" v-show="robotTyping && !robot">
             <div class="robot-img">
               <img
@@ -69,8 +69,7 @@
       </ul>
     </div>
 
-
-    <div v-show="!loading && !observe" class="container typing-area z-depth-2">
+    <div v-if="!loading && !observe" class="container typing-area z-depth-2">
       <div class="row">
         <textarea
           @keydown="updateTyping"
@@ -113,7 +112,7 @@ export default {
       robotTyping: false,
       navigatorTyping: false,
       typing: false,
-      sessionName:'Session Name'
+      sessionName: "Session Name"
     };
   },
   components: {
@@ -129,7 +128,7 @@ export default {
       .collection("rooms")
       .doc(this.id)
       .onSnapshot(data => {
-        this.sessionName = data.data().roomName
+        this.sessionName = data.data().roomName;
         this.active = data.data().active;
         this.loading = false;
       });
@@ -156,6 +155,10 @@ export default {
         return;
       }
 
+      if (!this.active) {
+        M.toast({ html: "Session is no longer active", classes: "red rounded" });
+        return;
+      }
       //update count
 
       var updateCount = this.$fireStore.collection("rooms").doc(this.id);
@@ -184,7 +187,7 @@ export default {
               chatNumber: newCount,
               timestamp: time,
               sender: this.robot ? "Robot" : "Navigator",
-              roomName:this.sessionName
+              roomName: this.sessionName
             });
 
           this.textarea = null;
@@ -245,6 +248,13 @@ export default {
     .row {
       margin-bottom: 5px;
     }
+  }
+
+  li:first-child {
+    padding-top: 20px;
+  }
+  li:last-child {
+    padding-bottom: 15px;
   }
 }
 
@@ -307,7 +317,7 @@ export default {
   border-radius: 15px;
   padding: 20px;
   width: 250px;
-      margin-top: 100px;
+  margin-top: 100px;
   .btn-small {
     width: 100%;
   }
@@ -320,10 +330,14 @@ export default {
   padding: 10px;
   width: 250px;
   text-align: center;
+  h5{
+        margin-top: 14px;
+    margin-bottom: 14px;
+  }
 }
 
-.sidepanel{
-      position: absolute;
-    margin-left: 470px;
+.sidepanel {
+  position: absolute;
+  margin-left: 470px;
 }
 </style>

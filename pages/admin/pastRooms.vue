@@ -34,6 +34,10 @@
             selectOnCheckboxOnly: true
           }"
           :search-options="{ enabled: true }"
+          :sort-options="{
+            enabled: true,
+            initialSortBy: { field: 'time.seconds', type: 'desc' }
+          }"
         >
           <template slot="table-row" slot-scope="props">
             <span
@@ -159,13 +163,13 @@ export default {
   methods: {
     //https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html#configuration
     selectionChanged(data) {
-      console.log(data.selectedRows);
+      //console.log(data.selectedRows);
       this.selectionData = data.selectedRows;
       this.countSelection = data.selectedRows.length;
     },
     deleteStudy(data) {
       this.deleteRowData = data.row;
-      console.log(data);
+      //console.log(data);
       var elems = this.$el.querySelectorAll(".modal");
       M.Modal.getInstance(elems[0]).open();
 
@@ -180,11 +184,11 @@ export default {
           data.docs.forEach(doc => {
             this.deleteMessages.push(doc.data());
           });
-          console.log(this.deleteMessages);
+          //console.log(this.deleteMessages);
         });
     },
     removeStudyFromDatabase() {
-      console.log(this.deleteRowData.uuid);
+      //console.log(this.deleteRowData.uuid);
 
       var r = confirm("Are you really sure you want to delete this dataset?");
       if (r == true) {
@@ -209,7 +213,7 @@ export default {
         data.docs.forEach(doc => {
           this.rooms.push(doc.data());
         });
-        console.log(this.rooms);
+        //console.log(this.rooms);
         this.loading = false;
       }, 300);
     });
@@ -219,7 +223,7 @@ export default {
   },
   filters: {
     moment: function(date) {
-      console.log(date);
+      //console.log(date);
       //return true
       return moment(date).format("llll");
     }
@@ -234,7 +238,7 @@ export default {
 }
 
 .bulk {
-  width: 150px;
+  width: 200px;
 }
 
 .selector {

@@ -6,7 +6,9 @@
         <div class="progress light-blue lighten-4">
           <div class="determinate blue" :style="{ width: width + '%' }"></div>
         </div>
-        <div class="row progress-text right">{{ width }}%</div>
+        <div class="row progress-text">
+          <div class="left">Processing: {{currentDataset}}</div>
+          <div class="right">{{ width }}%</div>
       </div>
       <!--<div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat"
@@ -14,6 +16,7 @@
         >
       </div>-->
     </div>
+  </div>
   </div>
 </template>
 
@@ -27,7 +30,8 @@ export default {
   props: ["selectionData", "selected", "startExport"],
   data() {
     return {
-      width: 10
+      width: 10,
+      currentDataset:null
     };
   },
   watch: {
@@ -58,6 +62,7 @@ export default {
       this.width = 0;
 
       for (const dataSet of selectedData) {
+        this.currentDataset = dataSet.roomName
         allTheData = [];
         pos++;
         this.width = Number(((pos / lengthOfArray) * 100).toFixed(2));
@@ -87,6 +92,7 @@ export default {
       this.width = 0;
 
       for (const dataSet of selectedData) {
+        this.currentDataset = dataSet.roomName
         pos++;
         this.width = Number(((pos / lengthOfArray) * 100).toFixed(2));
         let data = await this.$fireStore
@@ -166,12 +172,13 @@ export default {
 <style scoped lang="scss">
 .progress {
   margin-top: 55px;
-  height: 15px;
+  height: 16px;
   border-radius: 20px;
   transition: 450ms all;
 }
 
 .progress-text {
+  padding-top: 10px;
   font-size: 24px;
 }
 </style>

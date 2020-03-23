@@ -4,13 +4,14 @@
 
 <script>
 export default {
-  beforeMount() {
-          let pathArr = window.location.pathname.split("/");
-    let currentRoute = pathArr[pathArr.length - 1];
+  mounted() {
+    let pathArr = window.location.pathname.split("/");
+    let currentRoute = pathArr[pathArr.length - 2];
+    console.log(pathArr,currentRoute)
     if (currentRoute == "admin" || currentRoute == "admin/") {
-    this.$router.push({
-      path: "/admin/createRoom"
-    });
+      this.$router.push({
+        path: "/admin/createRoom"
+      });
     }
   }
 };

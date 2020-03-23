@@ -47,13 +47,12 @@ export default {
     }
 
         this.tabs = M.Tabs.init(tabs)
-
-    console.log(tabsLI);
   },
   beforeMount() {
     let pathArr = window.location.pathname.split("/");
-    let currentRoute = pathArr[pathArr.length - 1];
-    if (currentRoute == "admin") {
+    let currentRoute = pathArr[pathArr.length - 2];
+    console.log(pathArr,currentRoute)
+    if (currentRoute == "admin" || currentRoute == "admin/") {
       this.$router.push({
         path: "/admin/createRoom"
       });
