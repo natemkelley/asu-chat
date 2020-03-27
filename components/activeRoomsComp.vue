@@ -145,6 +145,9 @@ export default {
 background:rgba(0, 0, 0, 0.046);
 border-radius: 10px;
 }
+h4{
+  margin-bottom: 20px;
+}
 </style>
 
 

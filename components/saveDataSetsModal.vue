@@ -7,16 +7,16 @@
           <div class="determinate blue" :style="{ width: width + '%' }"></div>
         </div>
         <div class="row progress-text">
-          <div class="left">Processing: {{currentDataset}}</div>
+          <div class="left">Processing: {{ currentDataset }}</div>
           <div class="right">{{ width }}%</div>
-      </div>
-      <!--<div class="modal-footer">
+        </div>
+        <!--<div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat"
           >Agree</a
         >
       </div>-->
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       width: 10,
-      currentDataset:null
+      currentDataset: null
     };
   },
   watch: {
@@ -62,7 +62,7 @@ export default {
       this.width = 0;
 
       for (const dataSet of selectedData) {
-        this.currentDataset = dataSet.roomName
+        this.currentDataset = dataSet.roomName;
         allTheData = [];
         pos++;
         this.width = Number(((pos / lengthOfArray) * 100).toFixed(2));
@@ -79,7 +79,7 @@ export default {
 
         allTheData = await this.addExtraColumns(allTheData);
 
-        let exportName = allTheData[0].roomName+ ".csv";
+        let exportName = allTheData[0].roomName + ".csv";
         this.downloadCSV(allTheData, exportName);
       }
 
@@ -92,7 +92,7 @@ export default {
       this.width = 0;
 
       for (const dataSet of selectedData) {
-        this.currentDataset = dataSet.roomName
+        this.currentDataset = dataSet.roomName;
         pos++;
         this.width = Number(((pos / lengthOfArray) * 100).toFixed(2));
         let data = await this.$fireStore
@@ -103,7 +103,9 @@ export default {
           .get();
 
         data.docs.forEach(doc => {
-          allTheData.push(doc.data());
+          let data = doc.data();
+          data.orgName = dataSet.org
+          allTheData.push(data);
         });
       }
 
@@ -124,7 +126,6 @@ export default {
             "M/D/YYYY HH:mm:ss"
           ); //3/21/2020  3:38:00
           obj.timestampFormatted = timestampFormatted;
-
         });
         resolve(data);
       });
@@ -149,6 +150,10 @@ export default {
           value: "roomName"
         },
                 {
+          label: "Organization Name",
+          value: "orgName"
+        },
+        {
           label: "Unix Timestamp",
           value: "timestamp"
         }

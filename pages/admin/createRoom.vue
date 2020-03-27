@@ -21,6 +21,10 @@
         </div>
       </div>
 
+      <div class="row add-indicators" v-if="false">
+        <AddIndicators v-on:updateIndicators="updateIndicators" :org="org" />
+      </div>
+
       <div class="right">
         <button
           @click="createRoom"
@@ -39,12 +43,15 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+import AddIndicators from "@/components/addIndicators";
 
 export default {
+  components: { AddIndicators },
   data() {
     return {
       roomName: null,
-      org: null
+      org: null,
+      indicators:[]
     };
   },
   methods: {
@@ -71,7 +78,7 @@ export default {
           uuid: uuid,
           navigatorTyping: false,
           robotTyping: false,
-          chats: []
+          indicators: this.indicators
         })
         .then(data => {
           this.$router.push({
@@ -79,6 +86,10 @@ export default {
             query: { robot: true }
           });
         });
+    },
+    updateIndicators(data){
+      console.log(data)
+      this.indicators = data
     }
   }
 };
@@ -92,5 +103,6 @@ export default {
 
 .create-room .row {
   margin-bottom: 0px;
+  min-height: 97px;
 }
 </style>
