@@ -51,7 +51,7 @@ export default {
       });
 
       this.$emit("updateIndicators", returnArray);
-      await this.getStockIndicators()
+      await this.getStockIndicators();
     },
     selectChip(chipCont, chip) {
       if (chip.classList.contains("green")) {
@@ -87,8 +87,8 @@ export default {
       }
       if (this.stockIndicators.hasOwnProperty(name)) {
         console.log("duplicate key");
-        return
-      } 
+        return;
+      }
 
       let template = {
         org: this.org.toLowerCase(),

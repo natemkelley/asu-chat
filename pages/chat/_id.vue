@@ -104,7 +104,7 @@ import VueChatScroll from "vue-chat-scroll";
 Vue.use(VueChatScroll);
 import { RotateSquare2 } from "@/node_modules/vue-loading-spinner";
 import ThreeCircle from "@/components/threeCircles";
-
+import ViewIndicators from '@/components/viewIndicators'
 
 export default {
   layout: "chat",
@@ -125,7 +125,8 @@ export default {
   },
   components: {
     RotateSquare2,
-    ThreeCircle
+    ThreeCircle,
+    ViewIndicators
   },
   async asyncData({ params, error }) {
     return params;

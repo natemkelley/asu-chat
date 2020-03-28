@@ -259,6 +259,10 @@ export default {
 </style>
 
 <style>
+.chart{
+  padding-bottom: 50px;
+}
+
 .chart .vgt-global-search__input input {
   background-color: white;
   border: none;
