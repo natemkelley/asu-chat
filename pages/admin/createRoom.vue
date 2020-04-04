@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="row add-indicators" v-if="false">
+      <div class="row add-indicators" v-if="true">
         <AddIndicators v-on:updateIndicators="updateIndicators" :org="org" />
       </div>
 
@@ -51,7 +51,7 @@ export default {
     return {
       roomName: null,
       org: null,
-      indicators:[]
+      indicators: []
     };
   },
   methods: {
@@ -87,9 +87,9 @@ export default {
           });
         });
     },
-    updateIndicators(data){
-      console.log(data)
-      this.indicators = data
+    updateIndicators(data) {
+      console.log(data);
+      this.indicators = data;
     }
   }
 };

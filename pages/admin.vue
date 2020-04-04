@@ -1,5 +1,5 @@
 <template>
-  <div class="container push-top">
+  <div class="container push-top push-down">
     <div class="row tabs-row">
       <div class="col s12">
         <ul class="tabs tabs-fixed-width clickable">
@@ -10,7 +10,7 @@
             <NuxtLink class="" to="/admin/activeRooms">Active Rooms</NuxtLink>
           </li>
           <li class="tab col s3">
-            <NuxtLink class="" to="/admin/pastRooms">Past Rooms</NuxtLink>
+            <NuxtLink class="" to="/admin/pastRooms">Export Data</NuxtLink>
           </li>
         </ul>
       </div>
@@ -67,5 +67,9 @@ export default {
 
 .tabs-row {
   box-shadow: 0 4px 2px -2px rgba(128, 128, 128, 0.185);
+}
+
+.push-down{
+  padding-bottom: 50px;
 }
 </style>

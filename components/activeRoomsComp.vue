@@ -13,7 +13,7 @@
             {{ room.roomName }}
             <a
               @click="join(room.uuid)"
-              class=" clickable secondary-content waves-effect waves-light btn btn-small light-green darken-2"
+              class="clickable secondary-content waves-effect waves-light btn btn-small light-green darken-2"
               >Join</a
             >
             <a
@@ -31,7 +31,9 @@
           </div>
         </li>
 
-        <li class="container no-rooms" v-show="rooms.length==0 && !loading">There are no rooms to join</li>
+        <li class="container no-rooms" v-show="rooms.length == 0 && !loading">
+          There are no rooms to join
+        </li>
       </ul>
     </div>
   </div>
@@ -43,22 +45,22 @@ import { RotateSquare2 } from "@/node_modules/vue-loading-spinner";
 export default {
   props: ["navigator"],
   components: {
-    RotateSquare2
+    RotateSquare2,
   },
   data() {
     return {
       loading: true,
-      rooms: []
+      rooms: [],
     };
   },
   mounted() {
     this.$fireStore
       .collection("rooms")
       .where("active", "==", true)
-      .onSnapshot(data => {
+      .onSnapshot((data) => {
         setTimeout(() => {
           this.rooms = [];
-          data.docs.forEach(doc => {
+          data.docs.forEach((doc) => {
             this.rooms.push(doc.data());
           });
           this.loading = false;
@@ -69,36 +71,33 @@ export default {
     observe(uuid) {
       this.$router.push({
         path: "/chat/" + uuid,
-        query: { observe: true }
+        query: { observe: true },
       });
     },
     join(uuid) {
       if (this.navigator) {
         this.$router.push({
-          path: "/chat/" + uuid
+          path: "/chat/" + uuid,
         });
         return;
       }
 
       this.$router.push({
         path: "/chat/" + uuid,
-        query: { robot: true }
+        query: { robot: true },
       });
     },
     end(uuid) {
-      this.$fireStore
-        .collection("rooms")
-        .doc(uuid)
-        .update({
-          active: false
-        });
-    }
-  }
+      this.$fireStore.collection("rooms").doc(uuid).update({
+        active: false,
+      });
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.no-rooms{
+.no-rooms {
   font-size: 24px;
   text-align: center;
 }
@@ -113,7 +112,7 @@ export default {
 }
 
 .active-room {
-  max-width: 530px;
+  max-width: 750px;
   padding: 25px;
 }
 
@@ -139,15 +138,11 @@ export default {
   margin-bottom: 15px;
 }
 
-
-
 .collection-item:hover {
-background:rgba(0, 0, 0, 0.046);
-border-radius: 10px;
+  background: rgba(0, 0, 0, 0.046);
+  border-radius: 10px;
 }
-h4{
+h4 {
   margin-bottom: 20px;
 }
 </style>
-
-

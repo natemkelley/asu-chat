@@ -71,6 +71,9 @@
             can export your data .
           </p>
         </div>
+        <div class="row indicators" v-if="indicators.length > 0">
+          <ViewIndicators :indicators="indicators" :robot="robot" :id="id" />
+        </div>
       </div>
     </div>
 
@@ -104,7 +107,7 @@ import VueChatScroll from "vue-chat-scroll";
 Vue.use(VueChatScroll);
 import { RotateSquare2 } from "@/node_modules/vue-loading-spinner";
 import ThreeCircle from "@/components/threeCircles";
-import ViewIndicators from '@/components/viewIndicators'
+import ViewIndicators from "@/components/viewIndicators";
 
 export default {
   layout: "chat",
@@ -115,6 +118,7 @@ export default {
       id: null,
       loading: true,
       messages: [],
+      indicators: [],
       observe: null,
       robot: null,
       robotTyping: false,
@@ -140,6 +144,7 @@ export default {
         this.sessionName = data.data().roomName;
         document.title = "ASU Chat | " + this.sessionName;
         this.active = data.data().active;
+        this.indicators = data.data().indicators || [];
       });
     //chat
     this.$fireStore
@@ -196,7 +201,8 @@ export default {
               chatNumber: newCount,
               timestamp: time,
               sender: this.robot ? "Robot" : "Navigator",
-              roomName: this.sessionName
+              roomName: this.sessionName,
+              type:'message'
             });
 
           this.textarea = null;
@@ -260,7 +266,7 @@ export default {
       margin-right: 0;
     }
 
-    .cont{
+    .cont {
       width: 100%;
       max-width: 250px;
     }
@@ -290,6 +296,7 @@ export default {
 .messages {
   min-height: 100%;
   max-height: 40vh;
+  overflow-x: hidden;
   overflow-y: scroll;
   font-size: 17px;
   margin-top: 0px;

@@ -14,7 +14,7 @@
 
     <div class="col s12" v-show="chips == 'true'">
       <div class="chips chips-placeholder"></div>
-      <p>Click indicator to set its default state to true.</p>
+      <p>Hit enter when you are done typing an indicator. Click indicator to set its default state to true.</p>
     </div>
   </div>
 </template>
