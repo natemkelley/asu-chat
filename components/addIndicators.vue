@@ -1,18 +1,6 @@
 <template>
   <div style="margin-top:16px">
-    <div class="row toggle">
-      <div class="col s8">
-        <p>Do you want to have indicators for this chat room?</p>
-      </div>
-      <div class="col s4 right switch">
-        <select class="browser-default" v-model="chips">
-          <option value="false">No</option>
-          <option value="true">Yes</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="col s12" v-show="chips == 'true'">
+    <div class="col s12">
       <div class="chips chips-placeholder"></div>
       <p>Hit enter when you are done typing an indicator. Click indicator to set its default state to true.</p>
     </div>
@@ -26,7 +14,7 @@ export default {
   props: ["org"],
   data() {
     return {
-      chips: false,
+      chips: true,
       stockIndicators: {}
     };
   },
@@ -119,16 +107,14 @@ export default {
     }
   },
   watch: {
-    chips() {
-      this.initChips();
-    },
     org() {
-      if (!this.chips) {
-        return;
-      }
       this.initChips();
     }
-  }
+  },
+  mounted() {
+    this.initChips();
+    console.log(this)
+  },
 };
 </script>
 
@@ -146,5 +132,11 @@ export default {
 
 .chips {
   margin-bottom: 20px;
+}
+</style>
+
+<style>
+.chips .input{
+    width: 160px!important;
 }
 </style>

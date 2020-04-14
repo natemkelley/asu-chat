@@ -205,7 +205,7 @@ export default {
         })
         .then(() => {
           this.$router.push({
-            path: "/admin/pastRooms"
+            path: "/admin/exportData"
           });
         });
     }

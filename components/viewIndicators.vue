@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ["robot", "indicators", "id"],
+  props: ["robot", "indicators", "id", "sessionName"],
   methods: {
     toggleIndicator(data) {
       if (!this.robot) {
@@ -36,14 +36,18 @@ export default {
       var ref = this.$fireStore.collection("rooms").doc(this.id);
       ref
         .update({
-          indicators: this.indicators
+          indicators: this.indicators,
         })
         .then(() => {
-          console.log("Document successfully updated!");
+          console.log("Indicators Saved", this.indicators);
+          this.submitLog()
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error updating document: ", error);
         });
+    },
+    submitLog() {
+      let time = new Date().getTime();
 
       /*this.$fireStore
         .collection("rooms")
@@ -51,19 +55,19 @@ export default {
         .collection("chats")
         .add({
           message: '',
-          chatNumber: newCount,
+          chatNumber: null,
           timestamp: time,
           sender: this.robot ? "Robot" : "Navigator",
           roomName: this.sessionName,
-          type: "message"
+          type: "update"
         });*/
-    }
+    },
   },
   watch: {
     indicators() {
       console.log(this.indicators);
-    }
-  }
+    },
+  },
 };
 </script>
 

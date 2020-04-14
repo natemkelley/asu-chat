@@ -3,7 +3,7 @@
     <div class="container create-room">
       <h4 class="center-align">Create Room</h4>
 
-      <div class="row">
+      <div class="row choose-name">
         <div class="input-field col s12">
           <input v-model="roomName" id="roomName" type="text" />
           <label for="roomName">Room Name</label>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row choose-org">
         <div class="input-field col s12">
           <input v-model="org" id="email" type="text" class="" />
           <label for="email">Organization</label>
@@ -21,7 +21,18 @@
         </div>
       </div>
 
-      <div class="row add-indicators" v-if="true">
+      <div class="row choose-type" v-show="roomName && org">
+        <div class="input-field col s12">
+          <select multiple v-model="type">
+            <option value="" disabled selected>Choose your option</option>
+            <option value="chat">Chat</option>
+            <option value="indicators">Indicators</option>
+          </select>
+          <label>What do you want in this room?</label>
+        </div>
+      </div>
+
+      <div class="row add-indicators" v-if="type.includes('indicators')">
         <AddIndicators v-on:updateIndicators="updateIndicators" :org="org" />
       </div>
 
@@ -29,7 +40,7 @@
         <button
           @click="createRoom"
           class="btn waves-effect waves-light"
-          :class="{ grey: !roomName || !org }"
+          :class="{ grey: !roomName || !org || !type.length }"
           type="submit"
           name="action"
         >
@@ -51,7 +62,8 @@ export default {
     return {
       roomName: null,
       org: null,
-      indicators: []
+      indicators: [],
+      type: [],
     };
   },
   methods: {
@@ -62,6 +74,10 @@ export default {
       }
       if (!this.org) {
         M.toast({ html: "No Orgization!", classes: "red rounded" });
+        return;
+      }
+      if(!this.type.length){
+        M.toast({ html: "No Type!", classes: "red rounded" });
         return;
       }
 
@@ -78,24 +94,29 @@ export default {
           uuid: uuid,
           navigatorTyping: false,
           robotTyping: false,
-          indicators: this.indicators
+          indicators: this.indicators,
+          type:this.type
         })
-        .then(data => {
+        .then((data) => {
           this.$router.push({
             path: "/chat/" + uuid,
-            query: { robot: true }
+            query: { robot: true },
           });
         });
     },
     updateIndicators(data) {
       console.log(data);
       this.indicators = data;
-    }
-  }
+    },
+  },
+  mounted() {
+    var elems = this.$el.querySelectorAll("select");
+    M.FormSelect.init(elems);
+  },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .create-room {
   max-width: 430px;
   padding: 25px;
@@ -104,5 +125,15 @@ export default {
 .create-room .row {
   margin-bottom: 0px;
   min-height: 97px;
+}
+
+.choose-type {
+  .input-field {
+    margin-top: 30px;
+  }
+  label {
+    top: -23px;
+    font-size: 13px;
+  }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="loader" v-show="loading"><RotateSquare2 /></div>
 
     <div v-show="!loading" class="row dialogue-area">
-      <div class="dialogue-box z-depth-1 col offset-m2 m6 s8">
+      <div class="dialogue-box z-depth-1 col offset-l2 offset-m1 l6 m7 s12">
         <ul
           class="messages"
           v-chat-scroll="{ always: true, smooth: true, scrollonremoved: true }"
@@ -56,7 +56,7 @@
         </ul>
       </div>
 
-      <div class="sidebar col m4 s4">
+      <div class="sidebar col m4 s12">
         <div class="row cont session-name z-depth-1">
           <h5>{{ sessionName }}</h5>
         </div>
@@ -72,13 +72,18 @@
           </p>
         </div>
         <div class="row indicators" v-if="indicators.length > 0">
-          <ViewIndicators :indicators="indicators" :robot="robot" :id="id" />
+          <ViewIndicators
+            :indicators="indicators"
+            :robot="robot"
+            :id="id"
+            :sessionName="sessionName"
+          />
         </div>
       </div>
     </div>
 
-    <div v-if="!loading && !observe" class="row">
-      <div class="typing-area z-depth-2 col offset-m2 m6 s8">
+    <div v-if="!loading && !observe" class="row row-typing-area">
+      <div class="typing-area z-depth-2 col offset-l2 offset-m1 l6 m7 s12">
         <div class="row">
           <textarea
             @keydown="updateTyping"
@@ -124,27 +129,30 @@ export default {
       robotTyping: false,
       navigatorTyping: false,
       typing: false,
-      sessionName: "Session Name"
+      sessionName: "Session Name",
     };
   },
   components: {
     RotateSquare2,
     ThreeCircle,
-    ViewIndicators
+    ViewIndicators,
   },
   async asyncData({ params, error }) {
     return params;
   },
   mounted() {
+      window.addEventListener("resize", this.adjustForSmallScreen);
     //room
     this.$fireStore
       .collection("rooms")
       .doc(this.id)
-      .onSnapshot(data => {
+      .onSnapshot((data) => {
         this.sessionName = data.data().roomName;
         document.title = "ASU Chat | " + this.sessionName;
         this.active = data.data().active;
         this.indicators = data.data().indicators || [];
+        this.loading = false;
+        this.adjustForSmallScreen();
       });
     //chat
     this.$fireStore
@@ -152,12 +160,13 @@ export default {
       .doc(this.id)
       .collection("chats")
       .orderBy("chatNumber")
-      .onSnapshot(data => {
+      .onSnapshot((data) => {
         this.messages = [];
-        data.docs.forEach(doc => {
+        data.docs.forEach((doc) => {
           this.messages.push(doc.data());
         });
         this.loading = false;
+        this.adjustForSmallScreen();
       });
   },
   methods: {
@@ -171,14 +180,14 @@ export default {
       if (!this.active) {
         M.toast({
           html: "Session is no longer active",
-          classes: "red rounded"
+          classes: "red rounded",
         });
         return;
       }
 
       var updateCount = this.$fireStore.collection("rooms").doc(this.id);
       this.$fireStore
-        .runTransaction(transaction => {
+        .runTransaction((transaction) => {
           return transaction.get(updateCount).then(function(sfDoc) {
             if (!sfDoc.exists) {
               throw "Document does not exist!";
@@ -189,7 +198,7 @@ export default {
             return newNum;
           });
         })
-        .then(newCount => {
+        .then((newCount) => {
           let time = new Date().getTime();
 
           this.$fireStore
@@ -202,7 +211,7 @@ export default {
               timestamp: time,
               sender: this.robot ? "Robot" : "Navigator",
               roomName: this.sessionName,
-              type:'message'
+              type: "message",
             });
 
           this.textarea = null;
@@ -216,19 +225,36 @@ export default {
         .collection("rooms")
         .doc(this.id)
         .update({
-          active: false
+          active: false,
         })
         .then(() => {
           this.$router.push({
-            path: "/admin/pastRooms"
+            path: "/admin/exportData",
           });
         });
-    }
+    },
+    adjustForSmallScreen() {
+      var notReady = this.$el.querySelector(".row-typing-area") === null;
+      if (notReady || this.loading) {
+        return;
+      }
+      console.log(this.$el.querySelector(".sidebar").offsetHeight)
+
+      if (document.body.clientWidth < 600 && !this.loading) {
+        var moveTop = this.$el.querySelector(".sidebar").offsetHeight;
+        this.$el.querySelector(".dialogue-box").style.top = `${moveTop}px`;
+        this.$el.querySelector(".row-typing-area").style.top = `${moveTop}px`;
+      } else {
+        var moveTop = 0;
+        this.$el.querySelector(".dialogue-box").style.top = `${moveTop}px`;
+        this.$el.querySelector(".row-typing-area").style.top = `${moveTop}px`;
+      }
+    },
   },
   created() {
     this.observe = this.$route.query.observe;
     this.robot = this.$route.query.robot;
-  }
+  },
 };
 </script>
 
@@ -363,6 +389,32 @@ export default {
   textarea {
     border: 1px solid rgba(0, 0, 0, 0.155);
     font-size: 17px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .dialogue-area {
+    margin-top: 15px;
+    .dialogue-box {
+      height: 60vh;
+      margin-top: 0vh;
+    }
+  }
+  .sidebar {
+    position: absolute;
+    margin-top: 0px;
+  }
+
+  .row-typing-area {
+    position: relative;
+  }
+
+  .dialogue-area .sidebar {
+    padding: 0px 20px;
+    padding: 0px 0px;
+    .cont {
+      max-width: 100%;
+    }
   }
 }
 </style>

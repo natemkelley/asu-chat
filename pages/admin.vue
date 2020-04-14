@@ -10,7 +10,7 @@
             <NuxtLink class="" to="/admin/activeRooms">Active Rooms</NuxtLink>
           </li>
           <li class="tab col s3">
-            <NuxtLink class="" to="/admin/pastRooms">Export Data</NuxtLink>
+            <NuxtLink class="" to="/admin/exportData">Export Data</NuxtLink>
           </li>
         </ul>
       </div>
@@ -42,7 +42,7 @@ export default {
     if (currentRoute == "activeRooms") {
       tabsLI[1].getElementsByTagName('a')[0].classList.add("active");
     }
-    if (currentRoute == "pastRooms") {
+    if (currentRoute == "exportData") {
       tabsLI[2].getElementsByTagName('a')[0].classList.add("active");
     }
 

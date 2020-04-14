@@ -9,8 +9,8 @@
 
       <ul class="collection">
         <li v-for="room in rooms" :key="room.uuid" class="collection-item">
-          <div>
-            {{ room.roomName }}
+          <div class="collection-row">
+            <div class="name">{{ room.roomName }}</div>
             <a
               @click="join(room.uuid)"
               class="clickable secondary-content waves-effect waves-light btn btn-small light-green darken-2"
@@ -88,9 +88,12 @@ export default {
       });
     },
     end(uuid) {
-      this.$fireStore.collection("rooms").doc(uuid).update({
-        active: false,
-      });
+      this.$fireStore
+        .collection("rooms")
+        .doc(uuid)
+        .update({
+          active: false,
+        });
     },
   },
 };
@@ -136,6 +139,14 @@ export default {
 .collection-item {
   padding: 10px 4px 15px 15px;
   margin-bottom: 15px;
+  .collection-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .name {
+    width: calc(100% - 50px);
+  }
 }
 
 .collection-item:hover {
