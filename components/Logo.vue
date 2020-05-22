@@ -30,23 +30,21 @@
 </template>
 
 <script>
-
 export default {
-
   data() {
     return {
       loading: true,
-      rooms: []
+      rooms: [],
     };
   },
   mounted() {
     this.$fireStore
       .collection("rooms")
       .where("active", "==", true)
-      .onSnapshot(data => {
+      .onSnapshot((data) => {
         setTimeout(() => {
           this.rooms = [];
-          data.docs.forEach(doc => {
+          data.docs.forEach((doc) => {
             this.rooms.push(doc.data());
           });
           this.loading = false;
@@ -56,14 +54,14 @@ export default {
   methods: {
     observe(uuid) {
       this.$router.push({
-        path: "/chat/" + uuid,
-        query: { observe: true }
+        path: "/room/" + uuid,
+        query: { observe: true },
       });
     },
     join(uuid) {
       this.$router.push({
-        path: "/chat/" + uuid,
-        query: { robot: true }
+        path: "/room/" + uuid,
+        query: { robot: true },
       });
     },
     end(uuid) {
@@ -71,10 +69,10 @@ export default {
         .collection("rooms")
         .doc(uuid)
         .update({
-          active: false
+          active: false,
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

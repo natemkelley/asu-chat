@@ -70,14 +70,14 @@ export default {
   methods: {
     observe(uuid) {
       this.$router.push({
-        path: "/chat/" + uuid,
+        path: "/room/" + uuid,
         query: { observe: true },
       });
     },
     join(uuid) {
       if (this.navigator) {
         this.$router.push({
-          path: "/chat/" + uuid,
+          path: "/room/" + uuid,
         });
         return;
       }

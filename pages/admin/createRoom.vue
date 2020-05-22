@@ -15,24 +15,15 @@
 
       <div class="row choose-org">
         <div class="input-field col s12">
-          <input v-model="org" id="email" type="text" class="" />
+          <input v-model="org" type="text" class="" />
           <label for="email">Organization</label>
-          <span class="helper-text">This is used to filter studies</span>
+          <span class="helper-text"
+            >This is used to filter studies when exporting data</span
+          >
         </div>
       </div>
 
-      <div class="row choose-type" v-show="roomName && org">
-        <div class="input-field col s12">
-          <select multiple v-model="type">
-            <option value="" disabled selected>Choose your option</option>
-            <option value="chat">Chat</option>
-            <option value="indicators">Indicators</option>
-          </select>
-          <label>What do you want in this room?</label>
-        </div>
-      </div>
-
-      <div class="row add-indicators" v-if="type.includes('indicators')">
+      <div class="row add-indicators">
         <AddIndicators v-on:updateIndicators="updateIndicators" :org="org" />
       </div>
 
@@ -40,7 +31,6 @@
         <button
           @click="createRoom"
           class="btn waves-effect waves-light"
-          :class="{ grey: !roomName || !org || !type.length }"
           type="submit"
           name="action"
         >
@@ -63,7 +53,6 @@ export default {
       roomName: null,
       org: null,
       indicators: [],
-      type: [],
     };
   },
   methods: {
@@ -76,10 +65,6 @@ export default {
         M.toast({ html: "No Orgization!", classes: "red rounded" });
         return;
       }
-      if(!this.type.length){
-        M.toast({ html: "No Type!", classes: "red rounded" });
-        return;
-      }
 
       let uuid = uuidv4();
       this.$fireStore
@@ -90,22 +75,17 @@ export default {
           org: this.org,
           time: new Date(),
           active: true,
-          numberOfChat: 0,
           uuid: uuid,
-          navigatorTyping: false,
-          robotTyping: false,
           indicators: this.indicators,
-          type:this.type
         })
         .then((data) => {
           this.$router.push({
-            path: "/chat/" + uuid,
+            path: "/room/" + uuid,
             query: { robot: true },
           });
         });
     },
     updateIndicators(data) {
-      console.log(data);
       this.indicators = data;
     },
   },
