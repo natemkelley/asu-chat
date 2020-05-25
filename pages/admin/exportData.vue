@@ -6,6 +6,9 @@
       </div>
 
       <div class="row" v-show="!loading">
+        <h1 class="red-text">
+          THIS NO LONGER WORKS SINCE IT IS NOT A CHATROOM.
+        </h1>
         <div class="selector download right">
           <a
             @click="clickDownload"
@@ -31,12 +34,12 @@
           :rows="rooms"
           :select-options="{
             enabled: true,
-            selectOnCheckboxOnly: true
+            selectOnCheckboxOnly: true,
           }"
           :search-options="{ enabled: true }"
           :sort-options="{
             enabled: true,
-            initialSortBy: { field: 'time.seconds', type: 'desc' }
+            initialSortBy: { field: 'time.seconds', type: 'desc' },
           }"
         >
           <template slot="table-row" slot-scope="props">
@@ -116,33 +119,33 @@ export default {
       columns: [
         {
           label: "Room Name",
-          field: "roomName"
+          field: "roomName",
         },
         {
           label: "Organization",
-          field: "org"
+          field: "org",
         },
         {
           label: "Created On",
           field: "time.seconds",
           type: "date",
           dateInputFormat: "t",
-          dateOutputFormat: "MMMM d, yyyy"
+          dateOutputFormat: "MMMM d, yyyy",
         },
         {
           label: "# of Chats",
           field: "numberOfChat",
-          type: "number"
+          type: "number",
         },
         {
           label: "Active Status",
           field: "active",
-          type: "boolean"
+          type: "boolean",
         },
         {
           label: "Delete",
-          field: "delete"
-        }
+          field: "delete",
+        },
       ],
       rooms: [],
       selectionData: [],
@@ -152,13 +155,13 @@ export default {
       countSelection: 0,
       selected: "Download Individually",
       deleteMessages: [],
-      startExport: 0
+      startExport: 0,
     };
   },
   components: {
     VueGoodTable,
     RotateSquare2,
-    SaveData
+    SaveData,
   },
   methods: {
     //https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html#configuration
@@ -180,8 +183,8 @@ export default {
         .collection("chats")
         .orderBy("chatNumber")
         .get()
-        .then(data => {
-          data.docs.forEach(doc => {
+        .then((data) => {
+          data.docs.forEach((doc) => {
             this.deleteMessages.push(doc.data());
           });
           //console.log(this.deleteMessages);
@@ -204,13 +207,13 @@ export default {
     },
     clickDownload() {
       this.startExport = this.startExport + 1;
-    }
+    },
   },
   mounted() {
-    this.$fireStore.collection("rooms").onSnapshot(data => {
+    this.$fireStore.collection("rooms").onSnapshot((data) => {
       setTimeout(() => {
         this.rooms = [];
-        data.docs.forEach(doc => {
+        data.docs.forEach((doc) => {
           this.rooms.push(doc.data());
         });
         //console.log(this.rooms);
@@ -226,8 +229,8 @@ export default {
       //console.log(date);
       //return true
       return moment(date).format("llll");
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -259,7 +262,7 @@ export default {
 </style>
 
 <style>
-.chart{
+.chart {
   padding-bottom: 50px;
 }
 

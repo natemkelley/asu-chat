@@ -14,13 +14,7 @@
             <a
               @click="join(room.uuid)"
               class="clickable secondary-content waves-effect waves-light btn btn-small light-green darken-2"
-              >Join</a
-            >
-            <a
-              v-if="!navigator"
-              @click="observe(room.uuid)"
-              class="clickable secondary-content waves-effect waves-light btn btn-small light-blue darken-2"
-              >Observe</a
+              >Administer</a
             >
             <a
               v-if="!navigator"
@@ -83,7 +77,7 @@ export default {
       }
 
       this.$router.push({
-        path: "/chat/" + uuid,
+        path: "/room/" + uuid,
         query: { robot: true },
       });
     },
@@ -128,7 +122,10 @@ export default {
 }
 
 .secondary-content {
-  margin-left: 12.5px;
+  margin-left: 10px;
+  display: flex;
+  padding: 0px 25px;
+  justify-content: center;
 }
 
 .collection {
