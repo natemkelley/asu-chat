@@ -1,56 +1,65 @@
-require('dotenv').config({
-  path: ".env.local"
-})
+require("dotenv").config({
+  path: ".env.local",
+});
 
 export default {
-  mode: 'universal',
+  mode: "universal",
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
-    title: 'ASU Chat' || '',
+    title: "ASU Chat" || "",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: '' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "" },
+      {
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || "",
+      },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
-      {rel:'stylesheet',href:'https://fonts.googleapis.com/icon?family=Material+Icons'}
-    ]
+      { rel: "icon", type: "image/x-icon", href: "/favicon.png" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/icon?family=Material+Icons",
+      },
+    ],
   },
   /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
+   ** Customize the progress-bar color
+   */
+  loading: { color: "#fff" },
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [
-    '@/node_modules/materialize-css/dist/css/materialize.min.css',
-    '@/assets/css/main.css',
+    "@/node_modules/materialize-css/dist/css/materialize.min.css",
+    "@/assets/css/main.css",
   ],
   /*
-  ** Plugins to load before mounting the App
-  */
-  plugins: [
-    { src: '~/plugins/materialize', mode: 'client' }
-  ],
+   ** Plugins to load before mounting the App
+   */
+  plugins: [{ src: "~/plugins/materialize", mode: "client" }],
   /*
-  ** Nuxt.js dev-modules
-  */
+   ** Nuxt.js dev-modules
+   */
   buildModules: [
-    ["@nuxtjs/dotenv", {
-      filename: ".env.local"
-    }]
+    [
+      "@nuxt/typescript-build",
+      "@nuxtjs/dotenv",
+      {
+        filename: ".env.local",
+      },
+    ],
   ],
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     [
-      '@nuxtjs/firebase',
-      { 
+      "@nuxtjs/firebase",
+      {
         config: {
           apiKey: process.env.apiKey,
           authDomain: "asu-chat.firebaseapp.com",
@@ -59,29 +68,30 @@ export default {
           storageBucket: "asu-chat.appspot.com",
           messagingSenderId: process.env.messagingSenderId,
           appId: process.env.appId,
-          measurementId: process.env.measurementId
+          measurementId: process.env.measurementId,
         },
         services: {
-          firestore: true 
-        }
-      }
-    ]
-
+          firestore: true,
+        },
+      },
+      {
+        test: /.css$/,
+        use: ["vue-style-loader", "css-loader"],
+      },
+    ],
   ],
   /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
-  axios: {
-  },
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios: {},
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
-    }
-  }
-}
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {},
+  },
+};

@@ -1,8 +1,6 @@
-import Vue from 'vue'
-import materialize from '@/node_modules/materialize-css/dist/js/materialize.min.js'
+import Vue from "vue";
+import materialize from "@/node_modules/materialize-css/dist/js/materialize.min.js";
 
-Vue.use(materialize)
+Vue.use(materialize);
 
-
-console.log('loading materialize');
-
+console.log("loading materialize");

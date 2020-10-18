@@ -1,14 +1,9 @@
 <template>
-    <div class="push-top">
-        <ActiveRooms navigator="true" />
-    </div>
+  <div>INDEX</div>
 </template>
 
 <script>
-import ActiveRooms from '@/components/activeRoomsComp'
-
 export default {
-  components:{ActiveRooms}
-}
+  components: {},
+};
 </script>
-

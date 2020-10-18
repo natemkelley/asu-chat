@@ -1,75 +1,31 @@
 <template>
-  <div class="container push-top push-down">
-    <div class="row tabs-row">
-      <div class="col s12">
-        <ul class="tabs tabs-fixed-width clickable">
-          <li class="tab col s3">
-            <NuxtLink to="/admin/createRoom">Create Room</NuxtLink>
-          </li>
-          <li class="tab col s3">
-            <NuxtLink class="" to="/admin/activeRooms">Active Rooms</NuxtLink>
-          </li>
-          <li class="tab col s3">
-            <NuxtLink class="" to="/admin/pastRooms">Export Data</NuxtLink>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <NuxtChild />
+  <div class="admin-area">
+    <video-player />
   </div>
 </template>
 
 <script>
+import VideoPlayer from "@/components/VideoPlayer.vue";
+
 export default {
-  layout: "admin",
-  data() {
-    return {
-      tabs: null
-    };
+  components: {
+    VideoPlayer,
   },
-  mounted() {
-    let tabs = this.$el.querySelectorAll(".tabs");
 
-    //handle tabs
-    let pathArr = window.location.pathname.split("/");
-    let currentRoute = pathArr[pathArr.length - 1];
-    let tabsLI = this.$el.querySelectorAll(".tab");
-
-    if (currentRoute == "createRoom") {
-      tabsLI[0].getElementsByTagName('a')[0].classList.add("active");
-    }
-    if (currentRoute == "activeRooms") {
-      tabsLI[1].getElementsByTagName('a')[0].classList.add("active");
-    }
-    if (currentRoute == "pastRooms") {
-      tabsLI[2].getElementsByTagName('a')[0].classList.add("active");
-    }
-
-        this.tabs = M.Tabs.init(tabs)
-  },
-  beforeMount() {
-    let pathArr = window.location.pathname.split("/");
-    let currentRoute = pathArr[pathArr.length - 2];
-    if (currentRoute == "admin" || currentRoute == "admin/") {
-      this.$router.push({
-        path: "/admin/createRoom"
+  created() {
+    this.$fireStore.collection("rooms").onSnapshot((data) => {
+      data.docs.forEach((doc) => {
+        //console.log(doc.data());
       });
-    }
-  }
+    });
+  },
 };
 </script>
 
-<style scoped>
-.active {
-  background: rgba(255, 0, 55, 0.102) !important;
-}
-
-.tabs-row {
-  box-shadow: 0 4px 2px -2px rgba(128, 128, 128, 0.185);
-}
-
-.push-down{
-  padding-bottom: 50px;
+<style>
+.admin-area {
+  height: 100vh;
+  width: 100vw;
+  background: black;
 }
 </style>

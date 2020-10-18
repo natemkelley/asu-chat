@@ -1,35 +1,36 @@
 {
   "name": "asu-chat",
   "version": "1.0.0",
-  "description": "Chat application for use by ASU&#39;s ASSIST Lab",
+  "description": "Application for use by ASU&#39;s ASSIST Lab",
   "author": "nmkelley",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate",
-    "deploy": "nuxt generate && firebase deploy"
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "generate": "nuxt-ts generate",
+    "start": "nuxt-ts start",
+    "deploy": "nuxt-ts generate && firebase deploy"
   },
   "dependencies": {
+    "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/firebase": "^5.0.3",
-    "export-to-csv": "^0.2.1",
-    "file-saver": "^2.0.2",
+    "@types/lodash": "^4.14.162",
     "firebase": "^7.12.0",
-    "json-to-csv-export": "^1.0.2",
-    "json2csv": "^5.0.0",
+    "lodash": "^4.17.20",
     "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.24.0",
     "nuxt": "^2.0.0",
+    "style-loader": "^2.0.0",
     "uuid": "^7.0.2",
-    "vue-chat-scroll": "^1.3.6",
-    "vue-good-table": "^2.19.1",
+    "video.js": "^7.9.7",
+    "vue-class-component": "^7.2.6",
     "vue-loading-spinner": "^1.0.11",
-    "vue-quick-chat": "^1.1.0",
-    "vuetable-2": "^2.0.0-beta.4"
+    "vue-property-decorator": "^9.0.2"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.14.7",
+    "@nuxt/typescript-build": "^2.0.3",
     "@nuxtjs/dotenv": "^1.4.1",
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.2"
