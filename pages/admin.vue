@@ -6,7 +6,11 @@
 
     <div class="row">
       <div class="col s6">
-        <Playback />
+        <Playback
+          :videoPlaybackStatus="videoPlaybackStatus"
+          :videoTime="videoTime"
+          :videoStatus="videoStatus"
+        />
       </div>
       <div class="col s6">
         <Timer />

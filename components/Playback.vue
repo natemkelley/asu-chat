@@ -25,15 +25,16 @@ import Card from "@/components/Card.vue";
 
 export default {
   components: { Card },
+  props: ["videoTime", "videoPlaybackStatus", "videoStatus"],
   data() {
     return {
       time: 25,
-      start: false,
+      start: this.videoPlaybackStatus || false,
     };
   },
   computed: {
     buttonText() {
-      return this.start ? "STOP" : "START";
+      return this.start ? "STOP" : "PAUSE";
     },
     timerTime() {
       const prop = "0:00";
@@ -42,7 +43,14 @@ export default {
   },
   methods: {
     startTimer() {
-      this.start = !this.start;
+      if (this.videoStatus) {
+        this.start = !this.start;
+        this.$fireDb.ref().update({
+          videoPlaybackStatus: this.start,
+        });
+      } else {
+        M.toast({ html: "A video has not been loaded" });
+      }
     },
     addTime() {
       this.time = this.time + 1;
