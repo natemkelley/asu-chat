@@ -3,7 +3,8 @@ require("dotenv").config({
 });
 
 export default {
-  mode: "universal",
+  mode: "spa",
+  ssr: false,
   /*
    ** Headers of the page
    */
@@ -72,6 +73,7 @@ export default {
         },
         services: {
           firestore: true,
+          realtimeDb: true,
         },
       },
       {

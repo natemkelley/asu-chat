@@ -5,11 +5,11 @@
   "author": "nmkelley",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
-    "build": "nuxt-ts build",
-    "generate": "nuxt-ts generate",
-    "start": "nuxt-ts start",
-    "deploy": "nuxt-ts generate && firebase deploy"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start",
+    "deploy": "nuxt generate && firebase deploy"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",

@@ -1,5 +1,7 @@
 <template>
-  <video ref="videoPlayer" class="video-js " muted="muted"></video>
+  <div>
+    <video ref="videoPlayer" class="video-js " muted="muted"></video>-->
+  </div>
 </template>
 
 <script>
@@ -8,9 +10,11 @@ import videojsCSS from "video.js/dist/alt/video-js-cdn.css";
 
 export default {
   name: "VideoPlayer",
+  props: { src: String, videoPlaybackStatus: Boolean, time: Number },
   data() {
     return {
       player: null,
+      playerIsReady: false,
       videoOptions: {
         autoplay: false,
         controls: false,
@@ -18,42 +22,49 @@ export default {
         width: "100vw",
         sources: [
           {
-            src:
-              "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            src: this.src,
             type: "video/mp4",
           },
         ],
       },
     };
   },
-  mounted() {
-    this.player = videojs(this.$refs.videoPlayer, this.videoOptions);
-    this.player.ready(() => {
-      this.playVideo();
-    });
-
-    var myPlayer = this.player;
-
-    setInterval(() => {
-      var howMuchIsDownloaded = this.player.bufferedPercent();
-      var lengthOfVideo = this.player.duration();
-      this.player.paused() ? this.playVideo() : this.pauseVideo();
-      console.log("howMuchIsDownloaded", howMuchIsDownloaded);
-    }, 2000);
-  },
   methods: {
     playVideo() {
+      console.log("play called");
       this.player.play();
     },
     pauseVideo() {
-      console.log("pause");
+      console.log("paused called");
       this.player.pause();
     },
+    changeCurrentTime(time) {
+      console.log("time called", time);
+      this.player.currentTime(time);
+    },
+    getDuration() {
+      return this.player.duration();
+    },
+  },
+  watch: {
+    videoPlaybackStatus() {
+      this.videoPlaybackStatus ? this.playVideo() : this.pauseVideo();
+    },
+    time() {
+      this.changeCurrentTime(this.time);
+    },
+  },
+  mounted() {
+    this.player = videojs(this.$refs.videoPlayer, this.videoOptions);
+    this.player.ready(() => {
+      this.playerIsReady = true;
+    });
   },
   beforeDestroy() {
     if (this.player) {
       this.player.dispose();
     }
+    this.playerIsReady = false;
   },
 };
 </script>
@@ -62,6 +73,7 @@ export default {
 .video-js {
   height: 100%;
   width: 100vw;
+  position: fixed;
 }
 
 /*

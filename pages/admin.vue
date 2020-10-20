@@ -1,31 +1,67 @@
 <template>
-  <div class="admin-area">
-    <video-player />
+  <div class="container">
+    <div class="title">
+      <h2 class="center-align">ADMIN AREA</h2>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <Playback />
+      </div>
+      <div class="col s6">
+        <Timer />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12 center-align">
+        <h6>
+          A video has been
+          <strong
+            :class="{ 'red-text': !videoStatus, 'green-text': videoStatus }"
+            >{{ loadedText }}</strong
+          >
+        </h6>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import VideoPlayer from "@/components/VideoPlayer.vue";
+import Card from "@/components/Card.vue";
+import Playback from "@/components/Playback.vue";
+import Timer from "@/components/Timer.vue";
 
 export default {
-  components: {
-    VideoPlayer,
+  components: { Playback, Timer },
+  data() {
+    return { videoStatus: null, videoTime: 0, videoPlaybackStatus: null };
   },
-
+  computed: {
+    loadedText() {
+      return this.videoStatus ? "loaded" : "not been loaded";
+    },
+  },
   created() {
-    this.$fireStore.collection("rooms").onSnapshot((data) => {
-      data.docs.forEach((doc) => {
-        //console.log(doc.data());
-      });
+    this.$fireDb.ref().on("value", (snapshot) => {
+      this.initializing = false;
+      const { videoStatus, videoTime, videoPlaybackStatus } = snapshot.val();
+      this.videoStatus = videoStatus;
+      this.videoTime = videoTime;
+      this.videoPlaybackStatus = videoPlaybackStatus;
     });
   },
 };
 </script>
 
 <style>
+.container {
+  width: 90%;
+}
+
 .admin-area {
   height: 100vh;
   width: 100vw;
-  background: black;
+  background: white;
 }
 </style>
