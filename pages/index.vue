@@ -63,7 +63,7 @@ export default {
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
       const { videoStatus, videoTime, videoPlaybackStatus } = snapshot.val();
-      this.setVideoTime(videoTime);
+      this.resetVideoTime(videoTime);
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
     });
@@ -74,7 +74,7 @@ export default {
   methods: {
     resetVideo() {
       this.setVideoStatus(false);
-      this.setVideoTime(Number(0));
+      this.resetVideoTime(Number(0));
       this.setVideoPlaybackStatus(false);
     },
     onFileChange(fileList) {
@@ -94,10 +94,11 @@ export default {
         });
       }
     },
-    setVideoTime(time = 0) {
+    resetVideoTime(time = 0) {
       this.time = time;
       this.$fireDb.ref().update({
         videoTime: time,
+        percentage: 0,
       });
     },
     setVideoPlaybackStatus(status = false) {

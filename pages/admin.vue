@@ -25,6 +25,7 @@
           :videoPlaybackStatus="videoPlaybackStatus"
           :videoTime="videoTime"
           :videoStatus="videoStatus"
+          :currentVideoTime="currentVideoTime"
         />
       </div>
       <div class="col m6 s12 offset-m3">
@@ -43,7 +44,12 @@ import Points from "@/components/Points.vue";
 export default {
   components: { Playback, Timer, Points },
   data() {
-    return { videoStatus: null, videoTime: 0, videoPlaybackStatus: null };
+    return {
+      videoStatus: null,
+      videoTime: 0,
+      videoPlaybackStatus: null,
+      currentVideoTime: null,
+    };
   },
   computed: {
     loadedText() {
@@ -53,10 +59,16 @@ export default {
   created() {
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
-      const { videoStatus, videoTime, videoPlaybackStatus } = snapshot.val();
+      const {
+        videoStatus,
+        videoTime,
+        videoPlaybackStatus,
+        currentVideoTime,
+      } = snapshot.val();
       this.videoStatus = videoStatus;
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
+      this.currentVideoTime = currentVideoTime;
     });
   },
 };

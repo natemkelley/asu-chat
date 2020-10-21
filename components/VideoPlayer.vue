@@ -1,13 +1,11 @@
 <template>
   <div>
-    <video ref="videoPlayer" class="video-js " muted="muted"></video>-->
+    <video ref="videoPlayer" class="video-js" id="myVideo" muted="muted"></video
+    >-->
   </div>
 </template>
 
 <script>
-import videojs from "video.js";
-import videojsCSS from "video.js/dist/alt/video-js-cdn.css";
-
 export default {
   name: "VideoPlayer",
   props: { src: String, videoPlaybackStatus: Boolean, time: Number },
@@ -15,40 +13,37 @@ export default {
     return {
       percentageObj: null,
       player: null,
-      playerIsReady: false,
-      videoOptions: {
-        autoplay: false,
-        controls: false,
-        preload: true,
-        width: "100vw",
-        sources: [
-          {
-            src: this.src,
-            type: "video/mp4",
-          },
-        ],
-      },
     };
   },
   methods: {
     playVideo() {
       this.player.play();
-      this.getPercentage();
+      //this.getPercentage();
     },
     pauseVideo() {
-      this.player.pause();
+      for (let index = 0; index < 10; index++) {
+        const vid = document.getElementById("myVideo");
+        vid.pause();
+        this.player.pause();
+        console.log("pause");
+      }
+
       clearInterval(this.percentageObj);
     },
     changeCurrentTime(time) {
       this.player.currentTime(time);
     },
     getPercentage() {
-      const percentage = this.player.currentTime() / this.player.duration();
+      const percentage = this.player.currentTime / this.player.duration;
+      clearInterval(this.percentageObj);
+
       this.percentageObj = setInterval(() => {
+        console.log(this.player.currentTime());
         this.$fireDb.ref().update({
-          percentage: this.getPercentage(),
+          percentage: percentage,
+          videoTime: this.player.currentTime(),
         });
-      }, 3750);
+      }, 1000);
       return percentage;
     },
   },
@@ -61,16 +56,12 @@ export default {
     },
   },
   mounted() {
-    this.player = videojs(this.$refs.videoPlayer, this.videoOptions);
-    this.player.ready(() => {
-      this.playerIsReady = true;
-    });
+    this.player = this.$refs.videoPlayer;
+    this.player.src = this.src;
+    this.player.type = "video/mp4";
   },
   beforeDestroy() {
-    if (this.player) {
-      this.player.dispose();
-    }
-    this.playerIsReady = false;
+    alert("before destroy");
   },
 };
 </script>

@@ -3,6 +3,13 @@
     <div class="button" :class="{ stop: start }" @click="startVideo">
       {{ buttonText }}
     </div>
+
+    <div class="progress-bar">
+      <div class="progress">
+        <div class="determinate" style="width: 70%"></div>
+      </div>
+      <div class="show-time">{{ timerText }}</div>
+    </div>
   </Card>
 </template>
 
@@ -22,6 +29,9 @@ export default {
     buttonText() {
       return !this.start ? "START VIDEO" : "STOP VIDEO";
     },
+    timerText() {
+      return Math.round(this.videoTime);
+    },
   },
   methods: {
     startVideo() {
@@ -31,7 +41,7 @@ export default {
           videoPlaybackStatus: this.start,
         });
       } else {
-        M.toast({ html: "A video has not been loaded" });
+        M.toast({ html: "A video has not been loaded on the primary page" });
       }
     },
   },
@@ -52,6 +62,9 @@ export default {
 <style lang="scss" scoped>
 .filler {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .button {
@@ -65,8 +78,31 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 }
 .button.stop {
   background: rgb(235, 104, 104);
+}
+
+.progress-bar {
+  display: flex;
+  width: 100%;
+  font-size: 20px;
+}
+
+.progress {
+  height: 40px;
+  margin: 0;
+  background-color: rgb(214, 236, 207);
+  .determinate {
+    background-color: rgb(107, 208, 80);
+  }
+}
+
+.show-time {
+  width: 100px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 25px;
 }
 </style>

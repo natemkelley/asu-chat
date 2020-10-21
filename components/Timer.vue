@@ -62,7 +62,7 @@ export default {
         this.start = true;
         this.initializeTimer();
       } else {
-        M.toast({ html: "A video has not been loaded" });
+        M.toast({ html: "A video has not been loaded on the primary page" });
       }
     },
     initializeTimer() {
