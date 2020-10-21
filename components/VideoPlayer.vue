@@ -33,13 +33,11 @@ export default {
   methods: {
     playVideo() {
       this.player.play();
-
       this.getPercentage();
     },
     pauseVideo() {
       this.player.pause();
       clearInterval(this.percentageObj);
-      this.getPercentage();
     },
     changeCurrentTime(time) {
       this.player.currentTime(time);
@@ -50,7 +48,7 @@ export default {
         this.$fireDb.ref().update({
           percentage: this.getPercentage(),
         });
-      }, 4000);
+      }, 3750);
       return percentage;
     },
   },
