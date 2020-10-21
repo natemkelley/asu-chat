@@ -26,6 +26,7 @@
           :videoTime="videoTime"
           :videoStatus="videoStatus"
           :currentVideoTime="currentVideoTime"
+          :percentage="percentage"
         />
       </div>
       <div class="col m6 s12 offset-m3">
@@ -49,6 +50,7 @@ export default {
       videoTime: 0,
       videoPlaybackStatus: null,
       currentVideoTime: null,
+      percentage: 0,
     };
   },
   computed: {
@@ -64,11 +66,13 @@ export default {
         videoTime,
         videoPlaybackStatus,
         currentVideoTime,
+        percentage,
       } = snapshot.val();
       this.videoStatus = videoStatus;
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
       this.currentVideoTime = currentVideoTime;
+      this.percentage = percentage;
     });
   },
 };

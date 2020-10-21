@@ -6,7 +6,7 @@
 
     <div class="progress-bar">
       <div class="progress">
-        <div class="determinate" style="width: 70%"></div>
+        <div class="determinate" :style="{ width: progressPercentage }"></div>
       </div>
       <div class="show-time">{{ timerText }}</div>
     </div>
@@ -19,7 +19,7 @@ import cloneDeep from "@/node_modules/lodash/cloneDeep";
 
 export default {
   components: { Card },
-  props: ["videoTime", "videoPlaybackStatus", "videoStatus"],
+  props: ["videoTime", "videoPlaybackStatus", "videoStatus", "percentage"],
   data() {
     return {
       start: false,
@@ -30,10 +30,23 @@ export default {
       return !this.start ? "START VIDEO" : "STOP VIDEO";
     },
     timerText() {
-      return Math.round(this.videoTime);
+      const roundedSeconds = Math.round(this.videoTime);
+      return this.mmss(roundedSeconds);
+    },
+    progressPercentage() {
+      return this.percentage * 100 + "%";
     },
   },
   methods: {
+    pad(num) {
+      return ("0" + num).slice(-2);
+    },
+    mmss(secs) {
+      var minutes = Math.floor(secs / 60);
+      secs = secs % 60;
+      minutes = minutes % 60;
+      return `${this.pad(minutes)}:${this.pad(secs)}`;
+    },
     startVideo() {
       if (this.videoStatus) {
         this.start = !this.start;

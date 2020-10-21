@@ -63,9 +63,9 @@ export default {
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
       const { videoStatus, videoTime, videoPlaybackStatus } = snapshot.val();
-      this.resetVideoTime(videoTime);
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
+      this.setVideoTime(videoTime);
     });
   },
   async beforeDestroy() {
@@ -73,9 +73,12 @@ export default {
   },
   methods: {
     resetVideo() {
-      this.setVideoStatus(false);
-      this.resetVideoTime(Number(0));
-      this.setVideoPlaybackStatus(false);
+      this.$fireDb.ref().update({
+        percentage: 0,
+        videoPlaybackStatus: false,
+        videoStatus: false,
+        videoTime: 0,
+      });
     },
     onFileChange(fileList) {
       if (fileList[0]) {
@@ -94,11 +97,10 @@ export default {
         });
       }
     },
-    resetVideoTime(time = 0) {
+    setVideoTime(time = 0) {
       this.time = time;
       this.$fireDb.ref().update({
         videoTime: time,
-        percentage: 0,
       });
     },
     setVideoPlaybackStatus(status = false) {
@@ -109,6 +111,11 @@ export default {
         });
       }
     },
+  },
+  beforeDestroy() {
+    this.resetVideoTime(0);
+    this.setVideoStatus(false);
+    this.setVideoPlaybackStatus(false);
   },
 };
 </script>

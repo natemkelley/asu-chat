@@ -18,50 +18,35 @@ export default {
   methods: {
     playVideo() {
       this.player.play();
-      //this.getPercentage();
+      this.startCalculatingPercentage();
     },
     pauseVideo() {
-      for (let index = 0; index < 10; index++) {
-        const vid = document.getElementById("myVideo");
-        vid.pause();
+      for (let index = 0; index < 5; index++) {
         this.player.pause();
-        console.log("pause");
       }
 
       clearInterval(this.percentageObj);
     },
-    changeCurrentTime(time) {
-      this.player.currentTime(time);
-    },
-    getPercentage() {
-      const percentage = this.player.currentTime / this.player.duration;
+    startCalculatingPercentage() {
       clearInterval(this.percentageObj);
-
       this.percentageObj = setInterval(() => {
-        console.log(this.player.currentTime());
+        const percentage = this.player.currentTime / this.player.duration;
         this.$fireDb.ref().update({
-          percentage: percentage,
-          videoTime: this.player.currentTime(),
+          percentage: percentage.toFixed(3),
+          videoTime: this.player.currentTime,
         });
-      }, 1000);
-      return percentage;
+      }, 1100);
     },
   },
   watch: {
     videoPlaybackStatus() {
       this.videoPlaybackStatus ? this.playVideo() : this.pauseVideo();
     },
-    time() {
-      this.changeCurrentTime(this.time);
-    },
   },
   mounted() {
     this.player = this.$refs.videoPlayer;
     this.player.src = this.src;
     this.player.type = "video/mp4";
-  },
-  beforeDestroy() {
-    alert("before destroy");
   },
 };
 </script>
