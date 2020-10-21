@@ -5,19 +5,6 @@
     </div>
 
     <div class="row">
-      <div class="col s6">
-        <Playback
-          :videoPlaybackStatus="videoPlaybackStatus"
-          :videoTime="videoTime"
-          :videoStatus="videoStatus"
-        />
-      </div>
-      <div class="col s6">
-        <Timer />
-      </div>
-    </div>
-
-    <div class="row">
       <div class="col s12 center-align">
         <h6>
           A video has been
@@ -28,6 +15,22 @@
         </h6>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col m6 s12">
+        <Timer :videoStatus="videoStatus" />
+      </div>
+      <div class="col m6 s12">
+        <Playback
+          :videoPlaybackStatus="videoPlaybackStatus"
+          :videoTime="videoTime"
+          :videoStatus="videoStatus"
+        />
+      </div>
+      <div class="col m6 s12 offset-m3">
+        <Points :videoStatus="videoStatus" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,9 +38,10 @@
 import Card from "@/components/Card.vue";
 import Playback from "@/components/Playback.vue";
 import Timer from "@/components/Timer.vue";
+import Points from "@/components/Points.vue";
 
 export default {
-  components: { Playback, Timer },
+  components: { Playback, Timer, Points },
   data() {
     return { videoStatus: null, videoTime: 0, videoPlaybackStatus: null };
   },

@@ -13,6 +13,7 @@ export default {
   props: { src: String, videoPlaybackStatus: Boolean, time: Number },
   data() {
     return {
+      percentageObj: null,
       player: null,
       playerIsReady: false,
       videoOptions: {
@@ -31,19 +32,26 @@ export default {
   },
   methods: {
     playVideo() {
-      console.log("play called");
       this.player.play();
+
+      this.getPercentage();
     },
     pauseVideo() {
-      console.log("paused called");
       this.player.pause();
+      clearInterval(this.percentageObj);
+      this.getPercentage();
     },
     changeCurrentTime(time) {
-      console.log("time called", time);
       this.player.currentTime(time);
     },
-    getDuration() {
-      return this.player.duration();
+    getPercentage() {
+      const percentage = this.player.currentTime() / this.player.duration();
+      this.percentageObj = setInterval(() => {
+        this.$fireDb.ref().update({
+          percentage: this.getPercentage(),
+        });
+      }, 4000);
+      return percentage;
     },
   },
   watch: {
