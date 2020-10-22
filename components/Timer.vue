@@ -24,6 +24,8 @@
 import Card from "@/components/Card.vue";
 import cloneDeep from "@/node_modules/lodash/cloneDeep";
 
+//https://www.npmjs.com/package/vue-reactive-localstorage
+
 export default {
   components: { Card },
   props: ["videoTime", "videoPlaybackStatus", "videoStatus"],

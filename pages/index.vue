@@ -33,11 +33,11 @@
       v-if="videoSrc"
       :src="videoSrc"
       :videoPlaybackStatus="videoPlaybackStatus"
-      :time="time"
+      :videoTime="videoTime"
     />
 
-    <Draggable :top="70">{{ points }} </Draggable>
     <Draggable> {{ displayTimerTime }} </Draggable>
+    <Draggable :top="70">{{ points }} </Draggable>
   </div>
 </template>
 
@@ -55,7 +55,7 @@ export default {
       initializing: true,
       videoSrc: null,
       videoPlaybackStatus: false,
-      time: 0,
+      videoTime: 0,
       timerTime: { minute: 0, seconds: 0 },
       points: "0/100",
     };
@@ -80,6 +80,9 @@ export default {
     computedStyle() {
       return { display: !this.videoSrc ? "flex" : "block" };
     },
+  },
+  created() {
+    document.addEventListener("beforeunload", this.resetVideo);
   },
   mounted() {
     this.resetVideo();
@@ -139,10 +142,10 @@ export default {
         });
       }
     },
-    setVideoTime(time = 0) {
-      this.time = time;
+    setVideoTime(videoTime = 0) {
+      this.videoTime = time;
       this.$fireDb.ref().update({
-        videoTime: time,
+        videoTime: videoTime,
       });
     },
     setVideoPlaybackStatus(status = false) {

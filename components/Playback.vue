@@ -34,7 +34,8 @@ export default {
       return this.mmss(roundedSeconds);
     },
     progressPercentage() {
-      return this.percentage * 100 + "%";
+      const percentage = this.percentage * 100;
+      return `${percentage}%`;
     },
   },
   methods: {
@@ -107,8 +108,10 @@ export default {
   height: 40px;
   margin: 0;
   background-color: rgb(214, 236, 207);
+  transition: 500ms all;
   .determinate {
     background-color: rgb(107, 208, 80);
+    transition: 500ms all;
   }
 }
 
