@@ -36,7 +36,7 @@
       :time="time"
     />
 
-    <Draggable>{{ points }} </Draggable>
+    <Draggable :top="70">{{ points }} </Draggable>
     <Draggable> {{ displayTimerTime }} </Draggable>
   </div>
 </template>

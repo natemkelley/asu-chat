@@ -10,6 +10,11 @@
 
 <script>
 export default {
+  props: ["top", "left"],
+  mounted() {
+    this.$refs.draggableContainer.style.top = `${this.top}px`;
+    this.$refs.draggableContainer.style.left = `${this.left}px`;
+  },
   data: function() {
     return {
       positions: {
