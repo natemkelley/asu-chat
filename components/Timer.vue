@@ -98,7 +98,7 @@ export default {
     },
     updateTime() {
       this.$fireDb.ref().update({
-        videoTime: this.updatingTime,
+        timerTime: this.updatingTime,
       });
     },
     addTime() {

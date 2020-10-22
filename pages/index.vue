@@ -35,15 +35,20 @@
       :videoPlaybackStatus="videoPlaybackStatus"
       :time="time"
     />
+
+    <Draggable>{{ points }} </Draggable>
+    <Draggable> {{ displayTimerTime }} </Draggable>
   </div>
 </template>
 
 <script>
 import VideoPlayer from "@/components/VideoPlayer.vue";
+import Draggable from "@/components/Draggable.vue";
 
 export default {
   components: {
     VideoPlayer,
+    Draggable,
   },
   data() {
     return {
@@ -51,9 +56,27 @@ export default {
       videoSrc: null,
       videoPlaybackStatus: false,
       time: 0,
+      timerTime: { minute: 0, seconds: 0 },
+      points: "0/100",
     };
   },
   computed: {
+    displayTimerTime() {
+      const minutes =
+        this.timerTime.minute < 10
+          ? `0${this.timerTime.minute}`
+          : this.timerTime.minute;
+      const seconds =
+        this.timerTime.seconds < 10
+          ? `0${this.timerTime.seconds}`
+          : this.timerTime.seconds;
+
+      if (this.timerTime.minute <= 0 && this.timerTime.seconds <= 0) {
+        return `00:00`;
+      }
+
+      return `${minutes}:${seconds}`;
+    },
     computedStyle() {
       return { display: !this.videoSrc ? "flex" : "block" };
     },
@@ -62,22 +85,41 @@ export default {
     this.resetVideo();
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
-      const { videoStatus, videoTime, videoPlaybackStatus } = snapshot.val();
+      const {
+        videoStatus,
+        videoTime,
+        videoPlaybackStatus,
+        timerTime,
+      } = snapshot.val();
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
       this.setVideoTime(videoTime);
+      this.setTimerTime(timerTime);
     });
   },
   async beforeDestroy() {
     await this.resetVideo();
   },
   methods: {
+    setTimerTime(timerTime) {
+      this.timerTime = timerTime;
+    },
+    pad(num) {
+      return ("0" + num).slice(-2);
+    },
+    mmss(secs) {
+      var minutes = Math.floor(secs / 60);
+      secs = secs % 60;
+      minutes = minutes % 60;
+      return `${this.pad(minutes)}:${this.pad(secs)}`;
+    },
     resetVideo() {
       this.$fireDb.ref().update({
         percentage: 0,
         videoPlaybackStatus: false,
         videoStatus: false,
         videoTime: 0,
+        timerTime: { minute: 0, seconds: 0 },
       });
     },
     onFileChange(fileList) {
@@ -113,9 +155,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.resetVideoTime(0);
-    this.setVideoStatus(false);
-    this.setVideoPlaybackStatus(false);
+    this.resetVideo();
   },
 };
 </script>

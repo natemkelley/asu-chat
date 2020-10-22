@@ -29,21 +29,24 @@
           :percentage="percentage"
         />
       </div>
-      <div class="col m6 s12 offset-m3">
+      <div class="col m6 s12">
         <Points :videoStatus="videoStatus" />
+      </div>
+      <div class="col m6 s12">
+        <Sounds />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Card from "@/components/Card.vue";
 import Playback from "@/components/Playback.vue";
 import Timer from "@/components/Timer.vue";
 import Points from "@/components/Points.vue";
+import Sounds from "@/components/Sounds.vue";
 
 export default {
-  components: { Playback, Timer, Points },
+  components: { Playback, Timer, Points, Sounds },
   data() {
     return {
       videoStatus: null,

@@ -35,7 +35,7 @@ export default {
           percentage: percentage.toFixed(3),
           videoTime: this.player.currentTime,
         });
-      }, 1100);
+      }, 1000);
     },
   },
   watch: {
