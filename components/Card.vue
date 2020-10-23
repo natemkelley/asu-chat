@@ -11,6 +11,10 @@
   border: 3px solid black;
   border-radius: 15px;
   padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .divider {

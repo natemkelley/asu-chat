@@ -36,8 +36,8 @@
       :videoTime="videoTime"
     />
 
-    <Draggable> {{ displayTimerTime }} </Draggable>
-    <Draggable :top="70">{{ points }} </Draggable>
+    <Draggable :left="0"> {{ displayTimerTime }} </Draggable>
+    <Draggable :top="50" :left="0">{{ points }} </Draggable>
   </div>
 </template>
 
@@ -93,17 +93,22 @@ export default {
         videoTime,
         videoPlaybackStatus,
         timerTime,
+        points,
       } = snapshot.val();
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
       this.setVideoTime(videoTime);
       this.setTimerTime(timerTime);
+      this.setPoints(points);
     });
   },
   async beforeDestroy() {
     await this.resetVideo();
   },
   methods: {
+    setPoints(points) {
+      this.points = points;
+    },
     setTimerTime(timerTime) {
       this.timerTime = timerTime;
     },
@@ -123,6 +128,7 @@ export default {
         videoStatus: false,
         videoTime: 0,
         timerTime: { minute: 0, seconds: 0 },
+        points: "0/100",
       });
     },
     onFileChange(fileList) {
@@ -143,7 +149,7 @@ export default {
       }
     },
     setVideoTime(videoTime = 0) {
-      this.videoTime = time;
+      this.videoTime = videoTime;
       this.$fireDb.ref().update({
         videoTime: videoTime,
       });

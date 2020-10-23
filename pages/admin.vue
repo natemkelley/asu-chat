@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div v-show="videoStatus" class="row">
       <div class="col m6 s12">
         <Timer :videoStatus="videoStatus" />
       </div>
