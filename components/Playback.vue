@@ -16,6 +16,7 @@
 <script>
 import Card from "@/components/Card.vue";
 import cloneDeep from "@/node_modules/lodash/cloneDeep";
+import { timerTime } from "@/helpers/index.js";
 
 export default {
   components: { Card },
@@ -30,8 +31,7 @@ export default {
       return !this.start ? "START VIDEO" : "STOP VIDEO";
     },
     timerText() {
-      const roundedSeconds = Math.round(this.videoTime);
-      return this.mmss(roundedSeconds);
+      return timerTime(0, Math.round(this.videoTime));
     },
     progressPercentage() {
       const percentage = this.percentage * 100;
@@ -39,15 +39,6 @@ export default {
     },
   },
   methods: {
-    pad(num) {
-      return ("0" + num).slice(-2);
-    },
-    mmss(secs) {
-      var minutes = Math.floor(secs / 60);
-      secs = secs % 60;
-      minutes = minutes % 60;
-      return `${this.pad(minutes)}:${this.pad(secs)}`;
-    },
     startVideo() {
       if (this.videoStatus) {
         this.start = !this.start;

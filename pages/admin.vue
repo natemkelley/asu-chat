@@ -1,13 +1,9 @@
 <template>
   <div class="container">
-    <div class="title">
-      <h2 class="center-align">ADMIN AREA</h2>
-    </div>
-
     <div class="row">
       <div class="col s12 center-align">
         <h6>
-          "{{ videoText }}" has been
+          {{ videoText }} has been
           <strong
             :class="{ 'red-text': !videoStatus, 'green-text': videoStatus }"
             >{{ loadedText }}</strong
@@ -25,7 +21,6 @@
           :videoPlaybackStatus="videoPlaybackStatus"
           :videoTime="videoTime"
           :videoStatus="videoStatus"
-          :currentVideoTime="currentVideoTime"
           :percentage="percentage"
         />
       </div>
@@ -46,19 +41,19 @@ import Points from "@/components/Points.vue";
 import Sounds from "@/components/Sounds.vue";
 
 export default {
+  layout: "admin",
   components: { Playback, Timer, Points, Sounds },
   data() {
     return {
       videoStatus: null,
       videoTime: 0,
       videoPlaybackStatus: null,
-      currentVideoTime: null,
       percentage: 0,
     };
   },
   computed: {
     videoText() {
-      return this.videoStatus ? this.videoStatus : "A video";
+      return this.videoStatus ? `"${this.videoStatus}"` : "A video";
     },
     loadedText() {
       return this.videoStatus ? "loaded" : "not been loaded";
@@ -71,13 +66,11 @@ export default {
         videoStatus,
         videoTime,
         videoPlaybackStatus,
-        currentVideoTime,
         percentage,
       } = snapshot.val();
       this.videoStatus = videoStatus;
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
-      this.currentVideoTime = currentVideoTime;
       this.percentage = percentage;
     });
   },

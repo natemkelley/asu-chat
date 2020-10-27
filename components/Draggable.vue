@@ -2,6 +2,7 @@
   <div
     ref="draggableContainer"
     class="draggable-container"
+    :class="{ 'asu-gold': this.dragging }"
     @mousedown="dragMouseDown"
   >
     <slot></slot>
@@ -17,6 +18,7 @@ export default {
   },
   data: function() {
     return {
+      dragging: false,
       positions: {
         clientX: undefined,
         clientY: undefined,
@@ -28,6 +30,7 @@ export default {
   methods: {
     dragMouseDown: function(event) {
       event.preventDefault();
+      this.dragging = true;
       // get the mouse cursor position at startup:
       this.positions.clientX = event.clientX;
       this.positions.clientY = event.clientY;
@@ -53,6 +56,7 @@ export default {
     closeDragElement() {
       document.onmouseup = null;
       document.onmousemove = null;
+      this.dragging = false;
     },
   },
 };
@@ -74,5 +78,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: 0.25s background;
 }
 </style>

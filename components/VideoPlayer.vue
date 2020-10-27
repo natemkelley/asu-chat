@@ -8,7 +8,7 @@
 <script>
 export default {
   name: "VideoPlayer",
-  props: { src: String, videoPlaybackStatus: Boolean, videoTime: Number },
+  props: { src: String, videoPlaybackStatus: Boolean },
   data() {
     return {
       percentageObj: null,

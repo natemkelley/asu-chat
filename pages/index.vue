@@ -1,7 +1,7 @@
 <template>
   <div class="admin-area" :style="computedStyle">
     <div v-if="!videoSrc && initializing" class="preloader-wrapper big active">
-      <div class="spinner-layer spinner-blue-only">
+      <div class="spinner-layer spinner-red-only">
         <div class="circle-clipper left">
           <div class="circle"></div>
         </div>
@@ -15,7 +15,7 @@
     </div>
 
     <div v-show="!videoSrc && !initializing" class="file-field input-field">
-      <div class="btn">
+      <div class="btn grow asu-maroon">
         <span>Choose Video File</span>
         <input
           @change="onFileChange($event.target.files)"
@@ -33,11 +33,14 @@
       v-if="videoSrc"
       :src="videoSrc"
       :videoPlaybackStatus="videoPlaybackStatus"
-      :videoTime="videoTime"
     />
 
-    <Draggable :left="0"> {{ displayTimerTime }} </Draggable>
-    <Draggable :top="50" :left="0">{{ points }} </Draggable>
+    <Draggable v-if="!initializing" :left="0">
+      {{ displayTimerTime }}
+    </Draggable>
+    <Draggable v-if="!initializing" :top="50" :left="0"
+      >{{ points }}
+    </Draggable>
     <ClientSounds :sound="sound" />
   </div>
 </template>
@@ -46,7 +49,7 @@
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import Draggable from "@/components/Draggable.vue";
 import ClientSounds from "@/components/ClientSounds.vue";
-
+import { timerTime } from "@/helpers/index.js";
 export default {
   components: {
     VideoPlayer,
@@ -58,7 +61,6 @@ export default {
       initializing: true,
       videoSrc: null,
       videoPlaybackStatus: false,
-      videoTime: 0,
       timerTime: { minute: 0, seconds: 0 },
       points: "0/100",
       sound: "",
@@ -66,20 +68,7 @@ export default {
   },
   computed: {
     displayTimerTime() {
-      const minutes =
-        this.timerTime.minute < 10
-          ? `0${this.timerTime.minute}`
-          : this.timerTime.minute;
-      const seconds =
-        this.timerTime.seconds < 10
-          ? `0${this.timerTime.seconds}`
-          : this.timerTime.seconds;
-
-      if (this.timerTime.minute <= 0 && this.timerTime.seconds <= 0) {
-        return `00:00`;
-      }
-
-      return `${minutes}:${seconds}`;
+      return timerTime(this.timerTime.minute, this.timerTime.seconds);
     },
     computedStyle() {
       return { display: !this.videoSrc ? "flex" : "block" };
@@ -94,7 +83,6 @@ export default {
       this.initializing = false;
       const {
         videoStatus,
-        videoTime,
         videoPlaybackStatus,
         timerTime,
         points,
@@ -102,7 +90,6 @@ export default {
       } = snapshot.val();
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
-      this.setVideoTime(videoTime);
       this.setTimerTime(timerTime);
       this.setPoints(points);
       this.setSound(sound);
@@ -120,15 +107,6 @@ export default {
     },
     setTimerTime(timerTime) {
       this.timerTime = timerTime;
-    },
-    pad(num) {
-      return ("0" + num).slice(-2);
-    },
-    mmss(secs) {
-      var minutes = Math.floor(secs / 60);
-      secs = secs % 60;
-      minutes = minutes % 60;
-      return `${this.pad(minutes)}:${this.pad(secs)}`;
     },
     resetVideo() {
       this.$fireDb.ref().update({
@@ -158,12 +136,6 @@ export default {
         });
       }
     },
-    setVideoTime(videoTime = 0) {
-      this.videoTime = videoTime;
-      this.$fireDb.ref().update({
-        videoTime: videoTime,
-      });
-    },
     setVideoPlaybackStatus(status = false) {
       if (status != this.videoPlaybackStatus) {
         this.videoPlaybackStatus = status;
@@ -179,12 +151,19 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .admin-area {
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
   background: black;
+}
+
+.grow {
+  transition: all 0.15s ease-in-out;
+  &:hover {
+    transform: scale(1.25);
+  }
 }
 </style>

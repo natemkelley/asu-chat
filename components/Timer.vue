@@ -28,7 +28,7 @@ import cloneDeep from "@/node_modules/lodash/cloneDeep";
 
 export default {
   components: { Card },
-  props: ["videoTime", "videoPlaybackStatus", "videoStatus"],
+  props: ["videoPlaybackStatus", "videoStatus"],
   data() {
     return {
       time: { minute: 25, seconds: "0" },

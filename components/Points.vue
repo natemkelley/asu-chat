@@ -9,7 +9,7 @@
         >
         <a
           class="point-btn btn-floating waves-effect waves-light red darken-2"
-          @click="addPoints(2)"
+          @click="subtractPoints(2)"
           >-2</a
         >
         <a
