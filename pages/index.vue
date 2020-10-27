@@ -38,17 +38,20 @@
 
     <Draggable :left="0"> {{ displayTimerTime }} </Draggable>
     <Draggable :top="50" :left="0">{{ points }} </Draggable>
+    <ClientSounds :sound="sound" />
   </div>
 </template>
 
 <script>
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import Draggable from "@/components/Draggable.vue";
+import ClientSounds from "@/components/ClientSounds.vue";
 
 export default {
   components: {
     VideoPlayer,
     Draggable,
+    ClientSounds,
   },
   data() {
     return {
@@ -58,6 +61,7 @@ export default {
       videoTime: 0,
       timerTime: { minute: 0, seconds: 0 },
       points: "0/100",
+      sound: "",
     };
   },
   computed: {
@@ -94,18 +98,23 @@ export default {
         videoPlaybackStatus,
         timerTime,
         points,
+        sound,
       } = snapshot.val();
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
       this.setVideoTime(videoTime);
       this.setTimerTime(timerTime);
       this.setPoints(points);
+      this.setSound(sound);
     });
   },
   async beforeDestroy() {
     await this.resetVideo();
   },
   methods: {
+    setSound(sound) {
+      this.sound = sound;
+    },
     setPoints(points) {
       this.points = points;
     },
@@ -129,6 +138,7 @@ export default {
         videoTime: 0,
         timerTime: { minute: 0, seconds: 0 },
         points: "0/100",
+        sound: "",
       });
     },
     onFileChange(fileList) {
@@ -137,7 +147,7 @@ export default {
         const URL = window.URL || window.webkitURL;
         const fileURL = URL.createObjectURL(file);
         this.videoSrc = fileURL;
-        this.setVideoStatus(true);
+        this.setVideoStatus(file.name);
       }
     },
     setVideoStatus(status = false) {

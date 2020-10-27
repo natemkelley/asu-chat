@@ -2,17 +2,34 @@
   <Card class="points">
     <div class="points-input">
       <div class="arrows">
-        <i class="material-icons" @click="subtractPoints"
-          >keyboard_arrow_down</i
+        <a
+          class="point-btn btn-floating waves-effect waves-light red darken-1"
+          @click="subtractPoints(1)"
+          >-1</a
         >
-        <span>{{ points }}</span>
-        <i class="material-icons" @click="addPoints">keyboard_arrow_up</i>
+        <a
+          class="point-btn btn-floating waves-effect waves-light red darken-2"
+          @click="addPoints(2)"
+          >-2</a
+        >
+        <a
+          class="point-btn btn-floating waves-effect waves-light green darken-1"
+          @click="addPoints(5)"
+          >+5</a
+        >
+        <a
+          class="point-btn btn-floating waves-effect waves-light green darken-2"
+          @click="addPoints(10)"
+          >+10</a
+        >
       </div>
       <div>
         <input type="number" v-model="total" />
       </div>
     </div>
+
     <div class="divider"></div>
+
     <div class="points-output center-align">
       {{ pointsOutput }}
     </div>
@@ -36,11 +53,11 @@ export default {
     },
   },
   methods: {
-    addPoints() {
-      this.points++;
+    addPoints(number) {
+      this.points = this.points + number;
     },
-    subtractPoints() {
-      this.points--;
+    subtractPoints(number) {
+      this.points = this.points - number;
     },
     updatePoints() {
       this.$fireDb.ref().update({
@@ -66,10 +83,8 @@ export default {
   justify-content: space-between;
 
   .arrows {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 120px;
+    width: 70%;
+    margin-right: 15px;
   }
 
   input {
@@ -82,6 +97,10 @@ export default {
 
 .points-output {
   font-size: 90px;
+}
+
+.point-btn {
+  text-align: center;
 }
 
 .material-icons {

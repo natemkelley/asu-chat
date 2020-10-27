@@ -20,38 +20,34 @@
 <script>
 import Card from "@/components/Card.vue";
 import cloneDeep from "@/node_modules/lodash/cloneDeep";
-import ding from "@/assets/audio/ding-sound-effect_1.mp3";
-import negative from "@/assets/audio/negative-beep.mp3";
-import timer from "@/assets/audio/timer.mp3";
+
 import horn from "@/assets/images/horn.png";
 
 export default {
   components: { Card },
   data() {
     return {
-      ding: ding,
-      negative: negative,
-      timer: timer,
+      ding: "ding",
+      negative: "negative",
+      timer: "timer",
       horn: horn,
-      audioSound: ding,
     };
   },
   methods: {
-    playSound(sound) {
-      if (sound) {
-        if (
-          !this.audioSound.paused &&
-          String(this.audioSound.src).includes(String(sound))
-        ) {
-          this.stopSound();
-          return;
-        }
-        this.audioSound = new Audio(sound);
-        this.audioSound.play();
-      }
+    async playSound(sound) {
+      M.toast({
+        html: `Sending "${sound}" to client`,
+      });
+      await this.$fireDb.ref().update({
+        sound: sound,
+      });
+      M.toast({ html: `Played "${sound}" on client` });
     },
     stopSound() {
-      this.audioSound.pause();
+      /*this.$fireDb.ref().update({
+        sound: "",
+      });
+      M.toast({ html: `Stopping sound on client` });*/
     },
   },
 };

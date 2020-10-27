@@ -33,7 +33,6 @@ export default {
       this.positions.clientY = event.clientY;
       document.onmousemove = this.elementDrag;
       document.onmouseup = this.closeDragElement;
-      console.log("dragmousedownn");
     },
     elementDrag: function(event) {
       event.preventDefault();

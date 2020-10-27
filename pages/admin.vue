@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col s12 center-align">
         <h6>
-          A video has been
+          "{{ videoText }}" has been
           <strong
             :class="{ 'red-text': !videoStatus, 'green-text': videoStatus }"
             >{{ loadedText }}</strong
@@ -57,6 +57,9 @@ export default {
     };
   },
   computed: {
+    videoText() {
+      return this.videoStatus ? this.videoStatus : "A video";
+    },
     loadedText() {
       return this.videoStatus ? "loaded" : "not been loaded";
     },
