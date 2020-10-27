@@ -31,6 +31,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
     .image {
       height: 40px;
     }
