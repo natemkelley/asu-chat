@@ -127,6 +127,8 @@ export default {
   .toggles {
     display: flex;
     flex-direction: column;
+    height: 90px;
+    justify-content: space-between;
   }
 
   .the-time {
@@ -142,9 +144,10 @@ export default {
   .material-icons {
     cursor: pointer;
     font-size: 35px;
+    border-radius: 12px;
+    border: 3px solid black;
     &:hover {
       background: rgb(236, 236, 236);
-      border-radius: 12px;
     }
   }
 

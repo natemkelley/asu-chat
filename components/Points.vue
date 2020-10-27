@@ -3,15 +3,16 @@
     <div class="points-input">
       <div class="arrows">
         <a
-          class="point-btn btn-floating waves-effect waves-light red darken-1"
-          @click="subtractPoints(1)"
-          >-1</a
-        >
-        <a
           class="point-btn btn-floating waves-effect waves-light red darken-2"
           @click="subtractPoints(2)"
           >-2</a
         >
+        <a
+          class="point-btn btn-floating waves-effect waves-light red darken-1"
+          @click="subtractPoints(1)"
+          >-1</a
+        >
+
         <a
           class="point-btn btn-floating waves-effect waves-light green darken-1"
           @click="addPoints(5)"
