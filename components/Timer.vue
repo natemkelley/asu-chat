@@ -2,11 +2,10 @@
   <Card>
     <div class="stop-start">
       <div class="the-time">
-        <div class="toggles">
-          <i class="material-icons" @click="addTime">arrow_drop_up</i>
-          <i class="material-icons" @click="subtractTime">arrow_drop_down</i>
-        </div>
+        <i class="material-icons" @click="subtractTime">arrow_drop_down</i>
+
         <div class="time">{{ time.minute }} Minutes</div>
+        <i class="material-icons" @click="addTime">arrow_drop_up</i>
       </div>
 
       <div class="button" :class="{ stop: start }" @click="startTimer">
@@ -123,6 +122,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   font-size: 30px;
+  flex-wrap: wrap;
 
   .toggles {
     display: flex;
@@ -133,8 +133,9 @@ export default {
 
   .the-time {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    min-width: 250px;
   }
 
   .time {

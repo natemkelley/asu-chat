@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col s12 center-align">
-        <h6>
+        <h6 v-if="!loaded">LOADING</h6>
+        <h6 v-else>
           {{ videoText }} has been
           <strong
             :class="{ 'red-text': !videoStatus, 'green-text': videoStatus }"
@@ -49,6 +50,7 @@ export default {
       videoTime: 0,
       videoPlaybackStatus: null,
       percentage: 0,
+      loaded: false,
     };
   },
   computed: {
@@ -72,6 +74,7 @@ export default {
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
       this.percentage = percentage;
+      this.loaded = true;
     });
   },
 };
@@ -79,7 +82,8 @@ export default {
 
 <style>
 .container {
-  width: 90%;
+  width: 95%;
+  max-width: 1050px;
 }
 
 .admin-area {

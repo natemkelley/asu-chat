@@ -82,6 +82,7 @@ export default {
   font-size: 30px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .arrows {
     width: 70%;
