@@ -1,6 +1,10 @@
 <template>
   <Card class="filler">
-    <div class="button" :class="{ stop: start }" @click="startVideo">
+    <div
+      class="waves-effect waves-light button"
+      :class="{ stop: start }"
+      @click="startVideo"
+    >
       {{ buttonText }}
     </div>
 

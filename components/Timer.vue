@@ -15,7 +15,11 @@
         ></vue-timepicker>
       </div>
 
-      <div class="button" :class="{ stop: start }" @click="startTimer">
+      <div
+        class="waves-effect waves-light button "
+        :class="{ stop: start }"
+        @click="startTimer"
+      >
         {{ buttonText }}
       </div>
     </div>
