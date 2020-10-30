@@ -2,10 +2,17 @@
   <Card>
     <div class="stop-start">
       <div class="the-time">
-        <i class="material-icons" @click="subtractTime">arrow_drop_down</i>
-
-        <div class="time">{{ time.minute }} Minutes</div>
-        <i class="material-icons" @click="addTime">arrow_drop_up</i>
+        <vue-timepicker
+          class="time"
+          hide-clear-button
+          v-model="yourTimeValue"
+          format="mm:ss"
+          input-class="myTime"
+          input-width="100%"
+          auto-scroll
+          second-interval="5"
+          @change="changeTimeHandler"
+        ></vue-timepicker>
       </div>
 
       <div class="button" :class="{ stop: start }" @click="startTimer">
@@ -22,18 +29,26 @@
 <script>
 import Card from "@/components/Card.vue";
 import cloneDeep from "@/node_modules/lodash/cloneDeep";
+import { timerTime } from "@/helpers/index.js";
+import VueTimepicker from "vue2-timepicker";
+import "vue2-timepicker/dist/VueTimepicker.css";
 
 //https://www.npmjs.com/package/vue-reactive-localstorage
 
 export default {
-  components: { Card },
+  components: { Card, VueTimepicker },
   props: ["videoPlaybackStatus", "videoStatus"],
   data() {
     return {
-      time: { minute: 25, seconds: "0" },
-      updatingTime: {},
+      time: 25 * 60,
+      updatingTime: 0,
       start: this.videoPlaybackStatus || false,
       timerObj: null,
+      yourTimeValue: {
+        HH: "0",
+        mm: "25",
+        ss: "00",
+      },
     };
   },
   computed: {
@@ -41,20 +56,18 @@ export default {
       return this.start ? "RESTART" : "START";
     },
     timerTime() {
-      const minutes =
-        this.updatingTime.minute < 10
-          ? `0${this.updatingTime.minute}`
-          : this.updatingTime.minute;
-      const seconds =
-        this.updatingTime.seconds < 10
-          ? `0${this.updatingTime.seconds}`
-          : this.updatingTime.seconds;
-
-      if (this.updatingTime.minute <= 0 && this.updatingTime.seconds <= 0) {
+      if (this.updatingTime <= 0) {
         return `00:00`;
       }
 
-      return `${minutes}:${seconds}`;
+      return timerTime(0, this.updatingTime);
+    },
+    inputTimerTime() {
+      if (this.time <= 0) {
+        return `00:00`;
+      }
+
+      return timerTime(0, this.time);
     },
   },
   methods: {
@@ -67,26 +80,19 @@ export default {
       }
     },
     initializeTimer() {
-      this.updatingTime = cloneDeep(this.time);
+      console.log(this.time);
+      this.updatingTime = this.time;
+      console.log(this.updatingTime);
 
       if (this.timerObj) {
         this.clearInterval();
       }
 
       this.timerObj = setInterval(() => {
-        this.updatingTime.minute =
-          Number(this.updatingTime.seconds) == 0
-            ? this.updatingTime.minute - 1
-            : this.updatingTime.minute;
+        this.updatingTime = this.updatingTime - 1;
 
-        this.updatingTime.seconds =
-          Number(this.updatingTime.seconds) == 0
-            ? 59
-            : this.updatingTime.seconds - 1;
-
-        if (this.updatingTime.minute <= 0 && this.updatingTime.seconds <= 0) {
-          this.updatingTime.minutes = 0;
-          this.updatingTime.seconds = 0;
+        if (this.updatingTime <= 0) {
+          this.updatingTime = 0;
           this.clearInterval();
           return;
         }
@@ -102,21 +108,19 @@ export default {
         timerTime: this.updatingTime,
       });
     },
-    addTime() {
-      this.time.minute = this.time.minute + 1;
-    },
-    subtractTime() {
-      this.time.minute = this.time.minute - 1;
-      if (this.time.minute <= 0) this.time.minute = 0;
+    changeTimeHandler({ data }) {
+      const mm = data.mm * 60;
+      const ss = data.ss;
+      this.time = Number(mm) + Number(ss);
     },
   },
   created() {
-    this.updatingTime = cloneDeep(this.time);
+    this.updatingTime = this.time;
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .stop-start {
   display: flex;
   justify-content: space-between;
@@ -135,11 +139,32 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: 250px;
+    min-width: 200px;
+    max-width: 50%;
   }
 
   .time {
-    margin-left: 10px;
+    position: relative;
+    color: black !important;
+    cursor: pointer !important;
+
+    .myTime {
+      color: black !important;
+      width: 100%;
+      border: none;
+      border-bottom: none !important;
+      width: 100%;
+      padding: 0;
+      text-align: center;
+      cursor: pointer !important;
+      width: 100%;
+      font-size: 45px;
+      line-height: 0;
+      padding: 0;
+      margin: 0;
+      margin-top: -15px;
+      margin-bottom: -15px;
+    }
   }
 
   .material-icons {
@@ -163,6 +188,10 @@ export default {
   }
   .button.stop {
     background: rgb(235, 104, 104);
+  }
+  .vue__time-picker .active {
+    background: rgb(237, 175, 64) !important;
+    color: black !important;
   }
 }
 

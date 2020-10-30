@@ -61,14 +61,14 @@ export default {
       initializing: true,
       videoSrc: null,
       videoPlaybackStatus: false,
-      timerTime: { minute: 0, seconds: 0 },
+      timerTime: 0,
       points: "0/100",
       sound: "",
     };
   },
   computed: {
     displayTimerTime() {
-      return timerTime(this.timerTime.minute, this.timerTime.seconds);
+      return timerTime(0, this.timerTime);
     },
     computedStyle() {
       return { display: !this.videoSrc ? "flex" : "block" };
@@ -114,7 +114,7 @@ export default {
         videoPlaybackStatus: false,
         videoStatus: false,
         videoTime: 0,
-        timerTime: { minute: 0, seconds: 0 },
+        timerTime: 0,
         points: "0/100",
         sound: "",
       });
