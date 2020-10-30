@@ -4,7 +4,7 @@
       <div class="col s12 center-align">
         <h6 v-if="!loaded">LOADING</h6>
         <h6 v-else>
-          {{ videoText }} has been
+          {{ videoText }} has
           <strong
             :class="{ 'red-text': !videoStatus, 'green-text': videoStatus }"
             >{{ loadedText }}</strong
@@ -58,7 +58,7 @@ export default {
       return this.videoStatus ? `"${this.videoStatus}"` : "A video";
     },
     loadedText() {
-      return this.videoStatus ? "loaded" : "not been loaded";
+      return this.videoStatus ? "been loaded" : "not been loaded";
     },
   },
   created() {
@@ -83,7 +83,7 @@ export default {
 <style>
 .container {
   width: 95%;
-  max-width: 1250px;
+  max-width: 1350px;
   min-width: 970px;
 }
 
