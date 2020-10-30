@@ -38,8 +38,11 @@
     <Draggable v-if="!initializing" :left="0">
       {{ displayTimerTime }}
     </Draggable>
-    <Draggable v-if="!initializing" :top="50" :left="0"
-      >{{ points }}
+
+    <Draggable v-if="!initializing" :top="50" :left="0">
+      <transition name="bounce" mode="out-in">
+        <span :key="points">{{ points }}</span>
+      </transition>
     </Draggable>
     <ClientSounds :sound="sound" />
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
+    <div class="row mb-1">
       <div class="col s12 center-align">
         <h6 v-if="!loaded">LOADING</h6>
         <h6 v-else>
@@ -14,10 +14,10 @@
     </div>
 
     <div v-show="videoStatus" class="row">
-      <div class="col m6 s12">
+      <div class="col m5 s12">
         <Timer :videoStatus="videoStatus" />
       </div>
-      <div class="col m6 s12">
+      <div class="col m4 s12">
         <Playback
           :videoPlaybackStatus="videoPlaybackStatus"
           :videoTime="videoTime"
@@ -25,11 +25,11 @@
           :percentage="percentage"
         />
       </div>
-      <div class="col m6 s12">
-        <Points :videoStatus="videoStatus" />
-      </div>
-      <div class="col m6 s12">
+      <div class="col m3 s12">
         <Sounds />
+      </div>
+      <div class="col m12 s12">
+        <Points :videoStatus="videoStatus" />
       </div>
     </div>
   </div>
@@ -90,5 +90,11 @@ export default {
   height: 100vh;
   width: 100vw;
   background: white;
+}
+</style>
+
+<style lang="scss">
+.mb-1 {
+  margin-bottom: 4px;
 }
 </style>

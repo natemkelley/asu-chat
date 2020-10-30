@@ -1,18 +1,36 @@
-.push-top{
-    margin-top:70px
-  }
-  .push-top-small{
-    margin-top:30px
-  }
-
-.maroon{
-    background:#ac0101;
+.push-top {
+  margin-top: 70px;
+}
+.push-top-small {
+  margin-top: 30px;
 }
 
-.clickable{
+.maroon {
+  background: #ac0101;
+}
+
+.clickable {
   cursor: pointer;
 }
 
-.btn{
+.btn {
   border-radius: 10px;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.15s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.15s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

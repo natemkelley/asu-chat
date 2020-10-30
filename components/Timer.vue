@@ -139,7 +139,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: 200px;
+    min-width: 50%;
     max-width: 50%;
   }
 
