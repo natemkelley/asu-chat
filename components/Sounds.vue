@@ -37,11 +37,12 @@ export default {
     async playSound(sound) {
       M.toast({
         html: `Sending "${sound}" to client`,
+        displayLength: 3000,
       });
       await this.$fireDb.ref().update({
         sound: sound,
       });
-      M.toast({ html: `Played "${sound}" on client` });
+      M.toast({ html: `Played "${sound}" on client`, displayLength: 3000 });
     },
     stopSound() {
       /*this.$fireDb.ref().update({
