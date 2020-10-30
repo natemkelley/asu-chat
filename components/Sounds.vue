@@ -44,12 +44,7 @@ export default {
       });
       M.toast({ html: `Played "${sound}" on client`, displayLength: 3000 });
     },
-    stopSound() {
-      /*this.$fireDb.ref().update({
-        sound: "",
-      });
-      M.toast({ html: `Stopping sound on client` });*/
-    },
+    stopSound() {},
   },
 };
 </script>

@@ -83,7 +83,8 @@ export default {
 <style>
 .container {
   width: 95%;
-  max-width: 1050px;
+  max-width: 1250px;
+  min-width: 970px;
 }
 
 .admin-area {
