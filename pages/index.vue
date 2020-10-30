@@ -15,7 +15,7 @@
     </div>
 
     <div v-show="!videoSrc && !initializing" class="file-field input-field">
-      <div class="btn grow asu-maroon">
+      <div class="waves-effect waves-light btn grow asu-maroon">
         <span>Choose Video File</span>
         <input
           @change="onFileChange($event.target.files)"
