@@ -78,7 +78,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  box-shadow: 0px 0px 5px #00000081;
   transition: 0.25s background;
 }
 </style>
