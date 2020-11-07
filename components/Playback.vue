@@ -9,7 +9,11 @@
     </div>
 
     <div class="progress-bar">
-      <div class="progress">
+      <div
+        class="progress tooltipped"
+        data-position="bottom"
+        :data-tooltip="progressHoverText"
+      >
         <div class="determinate" :style="{ width: progressPercentage }"></div>
       </div>
       <div class="show-time">{{ timerText }}</div>
@@ -41,6 +45,10 @@ export default {
       const percentage = this.percentage * 100;
       return `${percentage}%`;
     },
+    progressHoverText() {
+      const percent = Number(this.percentage).toFixed(4) * 100;
+      return percent.toFixed(1) + "% Completed";
+    },
   },
   methods: {
     startVideo() {
@@ -53,12 +61,18 @@ export default {
         M.toast({ html: "A video has not been loaded on the primary page" });
       }
     },
+    startTooltip() {
+      const options = {};
+      const elems = document.querySelectorAll(".tooltipped");
+      const instances = M.Tooltip.init(elems, options);
+    },
   },
   mounted() {
     this.start = this.videoPlaybackStatus || false;
     this.$fireDb.ref().update({
       videoPlaybackStatus: this.start,
     });
+    this.startTooltip();
   },
   watch: {
     videoPlaybackStatus() {

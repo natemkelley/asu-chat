@@ -84,9 +84,7 @@ export default {
       }
     },
     initializeTimer() {
-      console.log(this.time);
       this.updatingTime = this.time;
-      console.log(this.updatingTime);
 
       if (this.timerObj) {
         this.clearInterval();
