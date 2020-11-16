@@ -1,20 +1,34 @@
 <template>
   <div class="map-container">
-    <l-map
-      ref="map"
-      :min-zoom="minZoom"
-      :crs="crs"
-      style="height: 500px; width: 100%;"
-      @click="createIcon"
-    >
-      <LImageOverlay :url="url" :bounds="bounds" />
-      <l-marker v-for="icon in icons" :key="icon.name" :lat-lng="icon">
-        <l-icon v-if="icon.url" :icon-url="icon.url" />
-      </l-marker>
-    </l-map>
-    <div @click="undoClick" class="undo">UNDO</div>
+    <div v-show="!selectedMap" class="row choose-map">
+      <div class="input-field col s5">
+        <select v-model="selectedMap">
+          <option v-for="map in maps" :key="map.index + 'maps'" :value="map">{{
+            map.name
+          }}</option>
+        </select>
+        <label>Choose your map</label>
+      </div>
+    </div>
 
-    <div class="choose-icon">
+    <div v-if="url && selectedMap">
+      <l-map
+        ref="map"
+        :min-zoom="minZoom"
+        :crs="crs"
+        :options="{ scrollWheelZoom: false }"
+        style="height: 500px; width: 100%;"
+        @click="createIcon"
+      >
+        <LImageOverlay :url="url" :bounds="bounds" />
+        <l-marker v-for="icon in icons" :key="icon.name" :lat-lng="icon">
+          <l-icon v-if="icon.url" :icon-url="icon.url" />
+        </l-marker>
+      </l-map>
+      <div @click="undoClick" v-if="selectedMap" class="undo">UNDO</div>
+    </div>
+
+    <div v-if="selectedMap" class="choose-icon">
       <table>
         <thead>
           <tr>
@@ -35,7 +49,7 @@
               {{ icon.points }}
               <span @click="pointsClick(icon.index, true)">+</span>
             </td>
-            <td @click="iconClicked(icon.index)">
+            <td @click="iconClicked(icon.index)" class="clickable">
               <img :src="icon.url" />
             </td>
           </tr>
@@ -61,6 +75,10 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import mission3map from "@/assets/images/mission3map.png";
+import mission2map from "@/assets/images/mission2map.png";
+import mission1map from "@/assets/images/mission1map.png";
+import trainingmap from "@/assets/images/trainingmap.png";
+
 import { Icon } from "leaflet";
 import { cloneDeep } from "lodash";
 
@@ -90,8 +108,8 @@ export default {
   },
   data() {
     return {
+      selectedMap: null,
       index: 0,
-      url: mission3map,
       bounds: [
         [0, 0],
         [750, 1000],
@@ -111,7 +129,8 @@ export default {
     };
   },
   mounted() {
-    this.$refs.map.mapObject.setView([380, 500], 0.25);
+    var elems = document.querySelectorAll("select");
+    var instances = M.FormSelect.init(elems, {});
   },
   methods: {
     createIcon(e) {
@@ -165,10 +184,54 @@ export default {
         this.index--;
       }
     },
+    setViewMap() {
+      this.$nextTick().then(() => {
+        this.$refs.map.mapObject.setView([380, 500], -1.5);
+        console.log("set view");
+      });
+    },
+  },
+  computed: {
+    maps() {
+      return [
+        {
+          index: 4,
+          map: trainingmap,
+          name: "Training Map",
+        },
+        {
+          index: 3,
+          map: mission3map,
+          name: "Mission 3 Map",
+        },
+        {
+          index: 2,
+          map: mission2map,
+          name: "Mission 2 Map",
+        },
+        {
+          index: 1,
+          map: mission1map,
+          name: "Mission 1 Map",
+        },
+      ];
+    },
+    url() {
+      return this.selectedMap && this.selectedMap.map;
+    },
   },
   watch: {
     icons() {
       this.$emit("newIcons", this.icons);
+    },
+    selectedMap() {
+      this.$emit("selectedMap", this.selectedMap);
+    },
+    async url() {
+      await this.$nextTick();
+      if (this.url) {
+        this.selectedMap && this.setViewMap();
+      }
     },
   },
 };
@@ -205,5 +268,9 @@ td span {
   background: rgba(128, 128, 128, 0.377);
   border-radius: 5px;
   cursor: pointer;
+}
+
+.choose-map {
+  margin: 20px;
 }
 </style>

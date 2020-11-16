@@ -1,5 +1,7 @@
 <template>
   <div class="">
+    <h3>Extra Points Fields</h3>
+    <h5>For example: time events</h5>
     <table class="extra">
       <thead>
         <tr>
