@@ -39,12 +39,13 @@
       {{ displayTimerTime }}
     </Draggable>
 
-    <Draggable v-if="!initializing" :top="70" :left="0">
+    <Draggable v-if="false" :top="70" :left="0">
       <transition name="bounce" mode="out-in">
         <span :key="points">{{ points }}</span>
       </transition>
     </Draggable>
     <ClientSounds :sound="sound" />
+    <PointsModal v-if="showPointsModal" :points="points" />
   </div>
 </template>
 
@@ -52,12 +53,14 @@
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import Draggable from "@/components/Draggable.vue";
 import ClientSounds from "@/components/ClientSounds.vue";
+import PointsModal from "@/components/PointsModal.vue";
 import { timerTime } from "@/helpers/index.js";
 export default {
   components: {
     VideoPlayer,
     Draggable,
     ClientSounds,
+    PointsModal,
   },
   data() {
     return {
@@ -67,6 +70,7 @@ export default {
       timerTime: 0,
       points: "0/100",
       sound: "",
+      showPointsModal: false,
     };
   },
   computed: {
@@ -90,12 +94,14 @@ export default {
         timerTime,
         points,
         sound,
+        showPointsModal,
       } = snapshot.val();
       this.setVideoStatus(videoStatus);
       this.setVideoPlaybackStatus(videoPlaybackStatus);
       this.setTimerTime(timerTime);
       this.setPoints(points);
       this.setSound(sound);
+      this.showPointsModal = showPointsModal;
     });
   },
   async beforeDestroy() {
@@ -120,6 +126,7 @@ export default {
         timerTime: 0,
         points: "0/100",
         sound: "",
+        showPointsModal: false,
       });
     },
     onFileChange(fileList) {

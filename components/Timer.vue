@@ -20,6 +20,13 @@
         :class="{ stop: start }"
         @click="startTimer"
       >
+        {{ startButtonText }}
+      </div>
+      <div
+        class="waves-effect waves-light button "
+        :class="{ stop: !pause }"
+        @click="togglePause"
+      >
         {{ buttonText }}
       </div>
     </div>
@@ -44,6 +51,7 @@ export default {
   props: ["videoPlaybackStatus", "videoStatus"],
   data() {
     return {
+      pause: false,
       time: 25 * 60,
       updatingTime: 0,
       start: this.videoPlaybackStatus || false,
@@ -56,8 +64,11 @@ export default {
     };
   },
   computed: {
-    buttonText() {
+    startButtonText() {
       return this.start ? "RESTART" : "START";
+    },
+    buttonText() {
+      return this.pause ? "UNPAUSE" : "PAUSE";
     },
     timerTime() {
       if (this.updatingTime <= 0) {
@@ -78,19 +89,19 @@ export default {
     startTimer() {
       if (this.videoStatus) {
         this.start = true;
-        this.initializeTimer();
+        this.initializeTimer(this.time);
       } else {
         M.toast({ html: "A video has not been loaded on the primary page" });
       }
     },
-    initializeTimer() {
-      this.updatingTime = this.time;
+    initializeTimer(time) {
+      this.updatingTime = time;
 
       if (this.timerObj) {
         this.clearInterval();
       }
 
-      this.timerObj = setInterval(() => {
+      this.timerObj = setTimeout(() => {
         this.updatingTime = this.updatingTime - 1;
 
         if (this.updatingTime <= 0) {
@@ -99,7 +110,12 @@ export default {
           return;
         }
 
+        if (this.pause) {
+          return;
+        }
+
         this.updateTime();
+        this.initializeTimer(this.updatingTime);
       }, 1000);
     },
     clearInterval() {
@@ -114,6 +130,15 @@ export default {
       const mm = data.mm * 60;
       const ss = data.ss;
       this.time = Number(mm) + Number(ss);
+    },
+
+    togglePause() {
+      if (this.pause) {
+        this.pause = false;
+        this.initializeTimer(this.updatingTime);
+      } else {
+        this.pause = true;
+      }
     },
   },
   created() {
@@ -141,8 +166,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: 50%;
-    max-width: 50%;
+    max-width: 33%;
   }
 
   .time {
@@ -181,10 +205,10 @@ export default {
 
   .button {
     text-align: center;
-    min-width: 139px;
+    min-width: 109px;
     cursor: pointer;
     border: 3px solid black;
-    padding: 3px 22px;
+    padding: 3px 5px;
     border-radius: 12px;
     background: rgb(53, 212, 53);
   }

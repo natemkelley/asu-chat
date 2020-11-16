@@ -65,7 +65,7 @@ export default {
 <style scoped lang="scss">
 .draggable-container {
   position: absolute;
-  z-index: 9999;
+  z-index: 99;
   padding: 5px 20px;
   width: 160px;
   border-radius: 12px;
