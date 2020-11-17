@@ -211,6 +211,7 @@ export default {
     padding: 3px 5px;
     border-radius: 12px;
     background: rgb(53, 212, 53);
+    text-align: center;
   }
   .button.stop {
     background: rgb(235, 104, 104);

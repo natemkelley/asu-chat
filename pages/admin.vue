@@ -14,10 +14,10 @@
     </div>
 
     <div v-show="videoStatus" class="row">
-      <div class="col m5 s12">
+      <div class="col m4 s12">
         <Timer :videoStatus="videoStatus" />
       </div>
-      <div class="col m4 s12">
+      <div class="col m3 s12">
         <Playback
           :videoPlaybackStatus="videoPlaybackStatus"
           :videoTime="videoTime"
@@ -27,6 +27,9 @@
       </div>
       <div class="col m3 s12">
         <Sounds />
+      </div>
+      <div class="col m2">
+        <OpenModal />
       </div>
       <div class="col m12 s12">
         <Points :videoStatus="videoStatus" />
@@ -40,10 +43,11 @@ import Playback from "@/components/Playback.vue";
 import Timer from "@/components/Timer.vue";
 import Points from "@/components/Points.vue";
 import Sounds from "@/components/Sounds.vue";
+import OpenModal from "@/components/OpenModal.vue";
 
 export default {
   layout: "admin",
-  components: { Playback, Timer, Points, Sounds },
+  components: { Playback, Timer, Points, Sounds, OpenModal },
   data() {
     return {
       videoStatus: null,
@@ -82,9 +86,9 @@ export default {
 
 <style>
 .container {
-  width: 95%;
-  max-width: 1350px;
-  min-width: 970px;
+  width: 100%;
+  max-width: 1450px;
+  min-width: 1070px;
 }
 
 .admin-area {

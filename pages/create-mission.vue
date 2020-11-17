@@ -17,6 +17,9 @@
 
     <div id="test1" class="mission-create col s12">
       <div v-if="!loaded">Mission not loaded yet...</div>
+      <div v-if="loaded && !missionToDelete.length">
+        No missions to delete
+      </div>
       <ul v-show="loaded" class="collapsible">
         <li v-for="mission in missionToDelete" :key="mission.uuid">
           <div class="collapsible-header space-between">

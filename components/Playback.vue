@@ -102,6 +102,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  text-align: center;
 }
 .button.stop {
   background: rgb(235, 104, 104);

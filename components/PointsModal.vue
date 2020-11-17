@@ -14,7 +14,7 @@
 export default {
   props: ["points"],
   mounted() {
-    const options = { endingTop: 35, opacity: 0.85 };
+    const options = { endingTop: 35, opacity: 0.85, dismissible: false };
     const elems = document.querySelectorAll(".modal");
     const instances = M.Modal.init(elems, options);
     instances[0].open();
