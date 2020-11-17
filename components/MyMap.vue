@@ -1,6 +1,9 @@
 <template>
   <Card class="filler">
-    <div class="points">POINTS: {{ points }}</div>
+    <div class="points-header">
+      <div class="points-number">POINTS: {{ points }}</div>
+      <OpenModal />
+    </div>
 
     <div class="map-container">
       <l-map
@@ -40,6 +43,8 @@ import {
 } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 
+import OpenModal from "@/components/OpenModal.vue";
+
 import mission3map from "@/assets/images/mission3map.png";
 import { Icon } from "leaflet";
 import { cloneDeep } from "lodash";
@@ -61,6 +66,7 @@ export default {
     LPopup,
     LPolyline,
     Card,
+    OpenModal,
   },
   data() {
     return {
@@ -115,12 +121,21 @@ export default {
 
 <style lang="scss">
 .points {
-  font-size: 38px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 22px;
-  font-weight: 500;
+  &-number {
+    font-size: 38px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 22px;
+    font-weight: 500;
+    min-width: 35%;
+    margin-right: 20px;
+  }
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .map-container {

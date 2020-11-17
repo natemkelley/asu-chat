@@ -4,7 +4,7 @@
       <transition name="bounce" mode="out-in">
         <span :key="points" :style="{ marginRight: '5px' }">{{ points }}</span>
       </transition>
-      /
+
       <input type="number" v-model="total" />
     </div>
     <div class="divider mb-2"></div>

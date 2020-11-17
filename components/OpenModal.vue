@@ -1,13 +1,11 @@
 <template>
-  <Card class="filler">
-    <div
-      class="waves-effect waves-light button"
-      :class="{ stop: openModal }"
-      @click="toggleModal"
-    >
-      {{ buttonText }}
-    </div>
-  </Card>
+  <div
+    class="waves-effect waves-light button"
+    :class="{ stop: openModal }"
+    @click="toggleModal"
+  >
+    {{ buttonText }}
+  </div>
 </template>
 
 <script>

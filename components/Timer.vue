@@ -40,7 +40,7 @@
 <script>
 import Card from "@/components/Card.vue";
 import cloneDeep from "@/node_modules/lodash/cloneDeep";
-import { timerTime } from "@/helpers/index.js";
+import { timerTime, pad } from "@/helpers/index.js";
 import VueTimepicker from "vue2-timepicker";
 import "vue2-timepicker/dist/VueTimepicker.css";
 
@@ -144,14 +144,16 @@ export default {
   },
   created() {
     if (this.setTime) {
-      const mm = Math.floor(this.setTime / 60);
-      const ss = this.setTime % 60;
+      const mm = pad(Math.floor(this.setTime / 60));
+      const ss = pad(this.setTime % 60);
       this.yourTimeValue = {
         ...this.yourTimeValue,
         mm: String(mm),
         ss: String(ss),
       };
     }
+
+    console.log(this.yourTimeValue);
 
     this.updatingTime = this.setTime || this.time;
   },

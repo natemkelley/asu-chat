@@ -14,7 +14,7 @@
     </div>
 
     <AdminTabs
-      v-if="missionData"
+      v-if="missionData.length"
       :missionData="missionData"
       @setMissionData="setMissionData"
     />
@@ -47,7 +47,7 @@ export default {
       videoPlaybackStatus: null,
       percentage: 0,
       loaded: false,
-      missions: [],
+      missionData: [],
       selectedMission: {},
       adminPage: null,
     };
