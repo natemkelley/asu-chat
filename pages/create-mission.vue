@@ -75,6 +75,8 @@
         </div>
       </div>
 
+      <CreateStoppages class="createMap" @stoppagesChanged="stopChanged" />
+
       <div class="row">
         <a @click="saveMission" class="button waves-effect waves-light btn">{{
           saveText
@@ -86,6 +88,7 @@
 
 <script>
 import CreateMap from "@/components/CreateMap.vue";
+import CreateStoppages from "@/components/CreateStoppages.vue";
 import CreatExtraPoints from "@/components/CreateExtraPoints.vue";
 import VueTimepicker from "vue2-timepicker";
 import DeleteMission from "@/components/createMissions/deleteMission.vue";
@@ -100,6 +103,7 @@ export default {
     CreatExtraPoints,
     VueTimepicker,
     DeleteMission,
+    CreateStoppages,
   },
   data() {
     return {
@@ -118,6 +122,7 @@ export default {
       loaded: false,
       saving: false,
       selectedMap: null,
+      stoppagesChanged: [],
     };
   },
   methods: {
@@ -133,6 +138,7 @@ export default {
         uuid: this.uuid,
         timerTime: this.timerTime,
         selectedMap: this.selectedMap,
+        stoppagesChanged: this.stoppagesChanged,
       };
 
       this.saving = true;
@@ -189,6 +195,9 @@ export default {
     },
     selectedMapChange(selectedMap) {
       this.selectedMap = selectedMap;
+    },
+    stopChanged(stoppagesChanged) {
+      this.stoppagesChanged = stoppagesChanged;
     },
   },
   mounted() {
