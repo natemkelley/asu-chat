@@ -20,7 +20,6 @@
           <l-icon v-if="icon.url" :icon-url="icon.url" />
         </l-marker>
       </l-map>
-      <div @click="undoClick" class="undo">UNDO</div>
     </div>
   </Card>
 </template>
@@ -77,13 +76,6 @@ export default {
     this.$refs.map.mapObject.setView([380, 500], -0.25);
   },
   methods: {
-    onMapClick(e) {
-      const iconConfig = {
-        ...e.latlng,
-      };
-
-      this.icons.push(iconConfig);
-    },
     iconClicked(e) {
       const { latlng } = e;
       const foundIconIndex = this.icons.findIndex(
@@ -97,18 +89,11 @@ export default {
 
       const newIcon = {
         ...foundIcon,
-        url:
-          "https://img.pngio.com/person-icon-png-50-px-person-png-1600_1600.png",
       };
 
-      const newIcons = cloneDeep(this.icons);
+      /*const newIcons = cloneDeep(this.icons);
       newIcons[foundIconIndex] = newIcon;
-      this.icons = newIcons;
-    },
-    undoClick() {
-      if (this.icons.length) {
-        this.icons.pop();
-      }
+      this.icons = newIcons;*/
     },
   },
   computed: {
@@ -146,17 +131,6 @@ export default {
   height: 580px;
 }
 
-.undo {
-  position: absolute;
-  top: 0;
-  z-index: 9999;
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  right: 0;
-  margin: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.562);
-}
 .filler {
   padding-bottom: 30px;
 }
