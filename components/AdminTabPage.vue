@@ -36,7 +36,7 @@ export default {
     "videoPlaybackStatus",
     "percentage",
   ],
-  components: { MyMap, Playback, Timer, Sounds, OpenModal },
+  components: { MyMap, Playback, Timer, Sounds },
   data() {
     return {};
   },
