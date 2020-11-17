@@ -13,33 +13,41 @@
       </div>
     </div>
 
-    <AdminTabs
-      v-if="missionData.length"
-      :missionData="missionData"
-      @setMissionData="setMissionData"
-    />
-
-    <div v-if="selectedMission">
-      <component
-        :key="selectedMission.uuid"
-        :is="adminPage"
-        :mission="selectedMission"
-        :videoStatus="videoStatus"
-        :videoTime="videoTime"
-        :videoPlaybackStatus="videoPlaybackStatus"
-        :percentage="percentage"
-      ></component>
+    <div v-show="videoStatus" class="row">
+      <div class="col m4 s12">
+        <Timer :videoStatus="videoStatus" />
+      </div>
+      <div class="col m3 s12">
+        <Playback
+          :videoPlaybackStatus="videoPlaybackStatus"
+          :videoTime="videoTime"
+          :videoStatus="videoStatus"
+          :percentage="percentage"
+        />
+      </div>
+      <div class="col m3 s12">
+        <Sounds />
+      </div>
+      <div class="col m2">
+        <OpenModal />
+      </div>
+      <div class="col m12 s12">
+        <Points :videoStatus="videoStatus" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import AdminTabs from "@/components/AdminTabs.vue";
-import AdminTabPage from "@/components/AdminTabPage.vue";
+import Playback from "@/components/Playback.vue";
+import Timer from "@/components/Timer.vue";
+import Points from "@/components/Points.vue";
+import Sounds from "@/components/Sounds.vue";
+import OpenModal from "@/components/OpenModal.vue";
 
 export default {
   layout: "admin",
-  components: { AdminTabs, AdminTabPage },
+  components: { Playback, Timer, Points, Sounds, OpenModal },
   data() {
     return {
       videoStatus: null,
@@ -47,9 +55,6 @@ export default {
       videoPlaybackStatus: null,
       percentage: 0,
       loaded: false,
-      missionData: [],
-      selectedMission: {},
-      adminPage: null,
     };
   },
   computed: {
@@ -63,36 +68,27 @@ export default {
   created() {
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
-      const data = snapshot.val();
       const {
         videoStatus,
         videoTime,
         videoPlaybackStatus,
         percentage,
-        missions,
-      } = data;
+      } = snapshot.val();
       this.videoStatus = videoStatus;
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
       this.percentage = percentage;
-      this.missionData = missions;
       this.loaded = true;
     });
-  },
-  methods: {
-    setMissionData(mission) {
-      this.selectedMission = mission;
-      this.adminPage = AdminTabPage;
-    },
   },
 };
 </script>
 
 <style>
 .container {
-  width: 95%;
-  max-width: 1350px;
-  min-width: 970px;
+  width: 100%;
+  max-width: 1450px;
+  min-width: 1070px;
 }
 
 .admin-area {

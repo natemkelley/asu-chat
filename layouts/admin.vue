@@ -7,6 +7,7 @@
         </div>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
           <li><a href="/">Participant View</a></li>
+          <li><a href="/create-mission">Create Mission </a></li>
         </ul>
       </div>
     </nav>
