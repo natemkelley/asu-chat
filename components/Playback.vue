@@ -9,11 +9,7 @@
     </div>
 
     <div class="progress-bar">
-      <div
-        class="progress tooltipped"
-        data-position="bottom"
-        :data-tooltip="progressHoverText"
-      >
+      <div class="progress tooltipped" data-position="bottom">
         <div class="determinate" :style="{ width: progressPercentage }"></div>
       </div>
       <div class="show-time">{{ timerText }}</div>

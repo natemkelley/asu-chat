@@ -48,7 +48,7 @@ import "vue2-timepicker/dist/VueTimepicker.css";
 
 export default {
   components: { Card, VueTimepicker },
-  props: ["videoPlaybackStatus", "videoStatus"],
+  props: ["videoPlaybackStatus", "videoStatus", "setTime"],
   data() {
     return {
       pause: false,
@@ -89,6 +89,7 @@ export default {
     startTimer() {
       if (this.videoStatus) {
         this.start = true;
+        this.pause = false;
         this.initializeTimer(this.time);
       } else {
         M.toast({ html: "A video has not been loaded on the primary page" });
@@ -142,7 +143,20 @@ export default {
     },
   },
   created() {
-    this.updatingTime = this.time;
+    if (this.setTime) {
+      const mm = Math.floor(this.setTime / 60);
+      const ss = this.setTime % 60;
+      this.yourTimeValue = {
+        ...this.yourTimeValue,
+        mm: String(mm),
+        ss: String(ss),
+      };
+    }
+
+    this.updatingTime = this.setTime || this.time;
+  },
+  beforeDestroy() {
+    this.pause = true;
   },
 };
 </script>

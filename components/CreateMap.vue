@@ -187,7 +187,6 @@ export default {
     setViewMap() {
       this.$nextTick().then(() => {
         this.$refs.map.mapObject.setView([380, 500], -1.5);
-        console.log("set view");
       });
     },
   },
@@ -225,6 +224,7 @@ export default {
       this.$emit("newIcons", this.icons);
     },
     selectedMap() {
+      console.log("selected", this.selectedMap);
       this.$emit("selectedMap", this.selectedMap);
     },
     async url() {

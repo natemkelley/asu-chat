@@ -13,23 +13,33 @@
       </div>
     </div>
 
-    <AdminTabs :missionData="missionData" @setMissionData="setMissionData" />
-    <AdminTabPage v-if="selectedMission" :mission="selectedMission" />
+    <AdminTabs
+      v-if="missionData"
+      :missionData="missionData"
+      @setMissionData="setMissionData"
+    />
+
+    <div v-if="selectedMission">
+      <component
+        :key="selectedMission.uuid"
+        :is="adminPage"
+        :mission="selectedMission"
+        :videoStatus="videoStatus"
+        :videoTime="videoTime"
+        :videoPlaybackStatus="videoPlaybackStatus"
+        :percentage="percentage"
+      ></component>
+    </div>
   </div>
 </template>
-m
+
 <script>
-import Playback from "@/components/Playback.vue";
-import Timer from "@/components/Timer.vue";
-import Points from "@/components/Points.vue";
-import Sounds from "@/components/Sounds.vue";
 import AdminTabs from "@/components/AdminTabs.vue";
 import AdminTabPage from "@/components/AdminTabPage.vue";
-import { missionConfig } from "@/helpers/missionConfig";
 
 export default {
   layout: "admin",
-  components: { Playback, Timer, Points, Sounds, AdminTabs, AdminTabPage },
+  components: { AdminTabs, AdminTabPage },
   data() {
     return {
       videoStatus: null,
@@ -37,8 +47,9 @@ export default {
       videoPlaybackStatus: null,
       percentage: 0,
       loaded: false,
-      missionData: missionConfig,
-      selectedMission: null,
+      missions: [],
+      selectedMission: {},
+      adminPage: null,
     };
   },
   computed: {
@@ -52,22 +63,26 @@ export default {
   created() {
     this.$fireDb.ref().on("value", (snapshot) => {
       this.initializing = false;
+      const data = snapshot.val();
       const {
         videoStatus,
         videoTime,
         videoPlaybackStatus,
         percentage,
-      } = snapshot.val();
+        missions,
+      } = data;
       this.videoStatus = videoStatus;
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
       this.percentage = percentage;
+      this.missionData = missions;
       this.loaded = true;
     });
   },
   methods: {
     setMissionData(mission) {
       this.selectedMission = mission;
+      this.adminPage = AdminTabPage;
     },
   },
 };

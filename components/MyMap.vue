@@ -1,27 +1,32 @@
 <template>
-  <div class="map-container">
-    <l-map
-      ref="map"
-      :min-zoom="minZoom"
-      :crs="crs"
-      style="height: 500px; width: 100%;"
-      @click="onMapClick"
-    >
-      <LImageOverlay :url="url" :bounds="bounds" />
-      <l-marker
-        v-for="icon in icons"
-        :key="icon.name"
-        :lat-lng="icon"
-        @click="iconClicked"
+  <Card class="filler">
+    <div class="points">POINTS: {{ points }}</div>
+
+    <div class="map-container">
+      <l-map
+        ref="map"
+        :min-zoom="minZoom"
+        :crs="crs"
+        :options="{ scrollWheelZoom: false, zoomDelta: 0.35, zoomSnap: 0 }"
+        style="height: 500px; width: 100%;"
       >
-        <l-icon v-if="icon.url" :icon-url="icon.url" />
-      </l-marker>
-    </l-map>
-    <div @click="undoClick" class="undo">UNDO</div>
-  </div>
+        <LImageOverlay :url="url" :bounds="bounds" />
+        <l-marker
+          v-for="icon in icons"
+          :key="icon.name"
+          :lat-lng="icon"
+          @click="iconClicked"
+        >
+          <l-icon v-if="icon.url" :icon-url="icon.url" />
+        </l-marker>
+      </l-map>
+      <div @click="undoClick" class="undo">UNDO</div>
+    </div>
+  </Card>
 </template>
 
 <script>
+import Card from "@/components/Card.vue";
 import leaflet from "leaflet";
 import { CRS } from "leaflet";
 import { latLngBounds, latLng } from "leaflet";
@@ -48,6 +53,7 @@ Icon.Default.mergeOptions({
 });
 
 export default {
+  props: ["mission"],
   components: {
     LIcon,
     LMap,
@@ -55,21 +61,20 @@ export default {
     LMarker,
     LPopup,
     LPolyline,
+    Card,
   },
   data() {
     return {
-      url: mission3map,
       bounds: [
         [0, 0],
         [750, 1000],
       ],
       minZoom: -2,
       crs: CRS.Simple,
-      icons: [],
     };
   },
   mounted() {
-    this.$refs.map.mapObject.setView([380, 500], 0.25);
+    this.$refs.map.mapObject.setView([380, 500], -0.25);
   },
   methods: {
     onMapClick(e) {
@@ -106,10 +111,33 @@ export default {
       }
     },
   },
+  computed: {
+    points() {
+      return "0/100";
+    },
+    icons() {
+      return this.mission.mapEvents || [];
+    },
+    extraPoints() {
+      return this.mission.extraPoints || [];
+    },
+    url() {
+      return this.mission.selectedMap.map || mission3map;
+    },
+  },
 };
 </script>
 
 <style lang="scss">
+.points {
+  font-size: 38px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+
 .map-container {
   position: relative;
 }
@@ -128,5 +156,8 @@ export default {
   right: 0;
   margin: 10px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.562);
+}
+.filler {
+  padding-bottom: 30px;
 }
 </style>

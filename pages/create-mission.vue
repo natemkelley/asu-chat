@@ -16,27 +16,11 @@
     </div>
 
     <div id="test1" class="mission-create col s12">
-      <div v-if="!loaded">Mission not loaded yet...</div>
-      <div v-if="loaded && !missionToDelete.length">
-        No missions to delete
-      </div>
-      <ul v-show="loaded" class="collapsible">
-        <li v-for="mission in missionToDelete" :key="mission.uuid">
-          <div class="collapsible-header space-between">
-            <div>
-              <i class="material-icons">filter_drama</i
-              >{{ mission.missionName }}
-            </div>
-            <div class="btn red" @click="deleteMission(mission)">DELETE</div>
-          </div>
-          <div class="collapsible-body">
-            <div class="col s4">{{ mission.missionName }}</div>
-            <div class="col s8">
-              <ViewThisJSON :json="mission" />
-            </div>
-          </div>
-        </li>
-      </ul>
+      <DeleteMission
+        :loaded="loaded"
+        :missionToDelete="missionToDelete"
+        @getMissions="getMissions"
+      />
     </div>
 
     <div class="mission-create" id="test2">
@@ -63,7 +47,11 @@
         </div>
       </div>
 
-      <CreateMap class="createMap" @newIcons="newIcons" />
+      <CreateMap
+        class="createMap"
+        @newIcons="newIcons"
+        @selectedMap="selectedMapChange"
+      />
 
       <CreatExtraPoints
         class="createMap"
@@ -100,14 +88,19 @@
 import CreateMap from "@/components/CreateMap.vue";
 import CreatExtraPoints from "@/components/CreateExtraPoints.vue";
 import VueTimepicker from "vue2-timepicker";
-import ViewThisJSON from "@/components/ViewThisJSON.vue";
+import DeleteMission from "@/components/createMissions/deleteMission.vue";
 import { v4 as uuidv4 } from "uuid";
 import "vue2-timepicker/dist/VueTimepicker.css";
 
 const prettyPrintJson = require("pretty-print-json");
 
 export default {
-  components: { CreateMap, CreatExtraPoints, VueTimepicker, ViewThisJSON },
+  components: {
+    CreateMap,
+    CreatExtraPoints,
+    VueTimepicker,
+    DeleteMission,
+  },
   data() {
     return {
       missionName: "",
@@ -124,24 +117,10 @@ export default {
       uuid: uuidv4(),
       loaded: false,
       saving: false,
+      selectedMap: null,
     };
   },
   methods: {
-    async deleteMission(dMission) {
-      console.log(dMission);
-
-      const mergedMissions = this.missionToDelete.filter(
-        (mission) => mission.uuid !== dMission.uuid
-      );
-
-      var r = confirm("Are you sure?");
-      if (r == true) {
-        await this.$fireDb.ref().update({
-          missions: [...mergedMissions],
-        });
-        this.getMissions();
-      }
-    },
     newIcons(newIcons) {
       this.iconData = newIcons;
     },
@@ -153,6 +132,7 @@ export default {
         mapEvents: this.iconData,
         uuid: this.uuid,
         timerTime: this.timerTime,
+        selectedMap: this.selectedMap,
       };
 
       this.saving = true;
@@ -206,7 +186,9 @@ export default {
 
       var elems = document.querySelectorAll(".collapsible");
       M.Collapsible.init(elems, options);
-      console.log("creating materialize");
+    },
+    selectedMapChange(selectedMap) {
+      this.selectedMap = selectedMap;
     },
   },
   mounted() {
@@ -258,7 +240,7 @@ form {
 }
 
 .createMap {
-  padding: 0px;
+  padding: 10px;
   padding-bottom: 30px;
   border: 3px solid black;
   margin-bottom: 40px;
@@ -279,9 +261,5 @@ form {
   background-color: transparent;
   color: #d8555a;
   background: rgb(247, 189, 189);
-}
-
-.space-between {
-  justify-content: space-between;
 }
 </style>
