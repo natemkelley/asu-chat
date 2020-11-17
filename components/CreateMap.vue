@@ -28,8 +28,8 @@
           @click="iconClicked(icon.index)"
         >
           <l-icon
-            v-if="icon.url"
-            :icon-url="icon.url"
+            v-if="icon.icon"
+            :icon-url="getIconByKeyMethod(icon.icon)"
             :icon-size="icon.iconSize"
             :class-name="icon.disabled ? 'icon-disabled' : ''"
           />
@@ -60,7 +60,7 @@
               <span @click="pointsClick(icon.index, true)">+</span>
             </td>
             <td @click="iconClicked(icon.index)" class="clickable">
-              <img :src="icon.url" />
+              <img :src="getIconByKeyMethod(icon.icon)" />
             </td>
           </tr>
         </tbody>
@@ -92,7 +92,7 @@ import trainingmap from "@/assets/images/trainingmap.png";
 import { Icon } from "leaflet";
 import { cloneDeep } from "lodash";
 
-import { mapIcons } from "@/helpers/missionConfig";
+import { mapIcons, getIconByKey } from "@/helpers/missionConfig";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -139,7 +139,7 @@ export default {
       const iconConfig = {
         ...e.latlng,
         index: this.icons.length,
-        url: this.iconImages[0],
+        icon: this.iconImages[0],
         points: 5,
         iconSize: [32, 32],
         disabled: false,
@@ -149,7 +149,7 @@ export default {
     iconClicked(foundIconIndex) {
       const foundIcon = this.icons[foundIconIndex];
       const currentIcon = this.iconImages.find(
-        (image) => image === foundIcon.url
+        (image) => image === foundIcon.icon
       );
       const currentIconIndex = this.iconImages.findIndex(
         (image) => image === currentIcon
@@ -162,7 +162,7 @@ export default {
 
       const newIcon = {
         ...foundIcon,
-        url: this.iconImages[nextIconIndex],
+        icon: this.iconImages[nextIconIndex],
       };
 
       const newIcons = cloneDeep(this.icons);
@@ -190,6 +190,9 @@ export default {
       this.$nextTick().then(() => {
         this.$refs.map.mapObject.setView([380, 500], -1.5);
       });
+    },
+    getIconByKeyMethod(icon) {
+      return getIconByKey(icon);
     },
   },
   computed: {
