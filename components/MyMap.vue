@@ -45,7 +45,6 @@ import "leaflet/dist/leaflet.css";
 
 import OpenModal from "@/components/OpenModal.vue";
 
-import mission3map from "@/assets/images/mission3map.png";
 import { Icon } from "leaflet";
 import { cloneDeep } from "lodash";
 
@@ -113,7 +112,7 @@ export default {
       return this.mission.extraPoints || [];
     },
     url() {
-      return this.mission.selectedMap.map || mission3map;
+      return this.mission.selectedMap.map;
     },
   },
 };

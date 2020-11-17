@@ -1,3 +1,12 @@
+import blueIcon from "@/static/mapicons/blue-icon.png";
+import redIcon from "@/static/mapicons/red-icon.png";
+import yellowIcon from "@/static/mapicons/yellow-icon.png";
+import blocked from "@/static/mapicons/blocked.png";
+import fire from "@/static/mapicons/fire.png";
+import opening from "@/static/mapicons/opening.png";
+import stuck from "@/static/mapicons/stuck.png";
+import reroute from "@/static/mapicons/reroute.png";
+
 export const missionConfig = [
   {
     missionName: "Training",
@@ -13,12 +22,13 @@ export const missionConfig = [
   },
 ];
 
-export const icons = [
-  {
-    name: "Sol",
-    lng: 175.2,
-    lat: 145.0,
-    "icon-url":
-      "https://img.pngio.com/person-icon-png-50-px-person-png-1600_1600.png",
-  },
+export const mapIcons = [
+  blueIcon,
+  redIcon,
+  yellowIcon,
+  blocked,
+  fire,
+  opening,
+  stuck,
+  reroute,
 ];

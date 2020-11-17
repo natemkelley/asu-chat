@@ -16,13 +16,23 @@
         ref="map"
         :min-zoom="minZoom"
         :crs="crs"
-        :options="{ scrollWheelZoom: false }"
+        :options="mapOptions"
         style="height: 500px; width: 100%;"
         @click="createIcon"
       >
         <LImageOverlay :url="url" :bounds="bounds" />
-        <l-marker v-for="icon in icons" :key="icon.name" :lat-lng="icon">
-          <l-icon v-if="icon.url" :icon-url="icon.url" />
+        <l-marker
+          v-for="icon in icons"
+          :key="icon.name"
+          :lat-lng="icon"
+          @click="iconClicked(icon.index)"
+        >
+          <l-icon
+            v-if="icon.url"
+            :icon-url="icon.url"
+            :icon-size="icon.iconSize"
+            :class-name="icon.disabled ? 'icon-disabled' : ''"
+          />
         </l-marker>
       </l-map>
       <div @click="undoClick" v-if="selectedMap" class="undo">UNDO</div>
@@ -82,13 +92,7 @@ import trainingmap from "@/assets/images/trainingmap.png";
 import { Icon } from "leaflet";
 import { cloneDeep } from "lodash";
 
-import fireIcon from "@/assets/images/fire.png";
-import MarkerBlue from "@/assets/images/marker-icon-blue.png";
-import MarkerPink from "@/assets/images/marker-icon-pink.png";
-import MarkerRed from "@/assets/images/marker-icon-red.png";
-import MarkerYellow from "@/assets/images/marker-icon-yellow.png";
-import EnviromentIcon from "@/assets/images/environment.png";
-import GasLeakIcon from "@/assets/images/gas-leak.png";
+import { mapIcons } from "@/helpers/missionConfig";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -114,18 +118,16 @@ export default {
         [0, 0],
         [750, 1000],
       ],
-      minZoom: -2,
+      minZoom: -1.25,
       crs: CRS.Simple,
       icons: [],
-      iconImages: [
-        MarkerBlue,
-        MarkerYellow,
-        MarkerPink,
-        MarkerRed,
-        fireIcon,
-        EnviromentIcon,
-        GasLeakIcon,
-      ],
+      iconImages: [...mapIcons],
+      mapOptions: {
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        zoomDelta: 0.5,
+        zoomSnap: 0,
+      },
     };
   },
   mounted() {
@@ -136,11 +138,12 @@ export default {
     createIcon(e) {
       const iconConfig = {
         ...e.latlng,
-        index: this.index,
+        index: this.icons.length,
         url: this.iconImages[0],
         points: 5,
+        iconSize: [32, 32],
+        disabled: false,
       };
-      this.index++;
       this.icons.push(iconConfig);
     },
     iconClicked(foundIconIndex) {
@@ -181,7 +184,6 @@ export default {
     undoClick() {
       if (this.icons.length) {
         this.icons.pop();
-        this.index--;
       }
     },
     setViewMap() {
@@ -224,7 +226,6 @@ export default {
       this.$emit("newIcons", this.icons);
     },
     selectedMap() {
-      console.log("selected", this.selectedMap);
       this.$emit("selectedMap", this.selectedMap);
     },
     async url() {
@@ -272,5 +273,9 @@ td span {
 
 .choose-map {
   margin: 20px;
+}
+
+.icon-disabled {
+  filter: grayscale(0.8) !important;
 }
 </style>
