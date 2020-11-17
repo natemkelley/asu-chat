@@ -31,7 +31,6 @@
             v-if="icon.icon"
             :icon-url="getIconByKeyMethod(icon.icon)"
             :icon-size="icon.iconSize"
-            :class-name="icon.disabled ? 'icon-disabled' : ''"
           />
         </l-marker>
       </l-map>
@@ -142,7 +141,7 @@ export default {
         icon: this.iconImages[0],
         points: 5,
         iconSize: [32, 32],
-        disabled: false,
+        disabled: true,
       };
       this.icons.push(iconConfig);
     },

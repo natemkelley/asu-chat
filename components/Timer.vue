@@ -153,8 +153,6 @@ export default {
       };
     }
 
-    console.log(this.yourTimeValue);
-
     this.updatingTime = this.setTime || this.time;
   },
   beforeDestroy() {

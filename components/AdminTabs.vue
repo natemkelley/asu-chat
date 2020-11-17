@@ -40,4 +40,10 @@ a,
 .clickable {
   cursor: pointer !important;
 }
+
+.tabs .tab a:hover,
+.tabs .tab a.active {
+  background-color: #fff7f7;
+  color: #d45e62;
+}
 </style>

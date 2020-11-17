@@ -174,7 +174,6 @@ export default {
         .ref("missions")
         .once("value")
         .then(async (snapshot) => {
-          console.log(snapshot.val());
           this.missionToDelete = snapshot.val() || [];
 
           if (!this.loaded) {
