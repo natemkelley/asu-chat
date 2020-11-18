@@ -14,6 +14,12 @@
       </div>
       <div class="show-time">{{ timerText }}</div>
     </div>
+
+    <div class="stoppages">
+      <div v-for="stop in stoppagesChanged" :key="stop.name">
+        {{ stop.name }}
+      </div>
+    </div>
   </Card>
 </template>
 
@@ -24,7 +30,13 @@ import { timerTime } from "@/helpers/index.js";
 
 export default {
   components: { Card },
-  props: ["videoTime", "videoPlaybackStatus", "videoStatus", "percentage"],
+  props: [
+    "videoTime",
+    "videoPlaybackStatus",
+    "videoStatus",
+    "percentage",
+    "stoppagesChanged",
+  ],
   data() {
     return {
       start: false,
@@ -120,5 +132,11 @@ export default {
   display: flex;
   justify-content: flex-end;
   font-size: 25px;
+}
+
+.stoppages {
+  margin-top: 20px;
+  font-size: 20px;
+  width: 100%;
 }
 </style>

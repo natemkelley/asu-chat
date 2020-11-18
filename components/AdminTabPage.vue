@@ -9,6 +9,7 @@
         :videoTime="videoTime"
         :videoStatus="videoStatus"
         :percentage="percentage"
+        :stoppagesChanged="mission.stoppagesChanged"
       />
     </div>
 
