@@ -134,8 +134,8 @@ export default {
       this.extraPoints = this.extraPoints + extraPoint.points;
       M.toast({
         html: `Added ${extraPoint.points} points`,
-        displayLength: 1050,
-        class: "green darken-1",
+        displayLength: 111050,
+        classes: "green darken-1",
       });
     },
   },
@@ -186,10 +186,6 @@ export default {
 
 .map-container {
   position: relative;
-}
-
-.filler {
-  padding-bottom: 30px;
 }
 
 .myicon {

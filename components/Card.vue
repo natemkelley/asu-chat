@@ -7,6 +7,7 @@
 <style lang="scss">
 .card {
   width: 100%;
+  height: 100%;
   min-height: 270px;
   border: 3px solid black;
   border-radius: 15px;
