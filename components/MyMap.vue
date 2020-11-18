@@ -20,10 +20,11 @@
           :lat-lng="icon"
           @click="iconClicked(icon)"
         >
+          <!-- disabled is actually reversed. I was lazy and didn't change it -->
           <l-icon
             v-if="icon.icon"
             :icon-size="icon.iconSize"
-            :class-name="icon.disabled ? 'myicon icon-disabled' : 'myicon'"
+            :class-name="!icon.disabled ? 'myicon turn-green' : 'myicon'"
             :icon-url="getIconByKeyMethod(icon.icon)"
           />
         </l-marker>
@@ -34,21 +35,18 @@
       <div class="extra-points-title">Extra Points</div>
       <div class="row extra-points-table">
         <div
-          v-for="point in extraPoints"
+          v-for="point in mission.extraPoints"
           :key="point.index + 'check'"
-          class="extra-points-check"
+          class="extra-points-check waves-effect waves-dark"
           :class="{ enabled: point.enabled }"
+          @click="extraPointsClicked(point)"
         >
-          <label>
-            <input
-              type="checkbox"
-              class="filled-in"
-              @click="extraPointsClicked(point)"
-            />
-            <span class="extra-points-check-title"
-              >{{ point.name }} ({{ point.points }})</span
-            >
-          </label>
+          <div class="extra-points-check-title ">
+            <div>{{ point.name }}</div>
+            <div class="extra-points-check-title-badge">
+              +{{ point.points }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -73,7 +71,7 @@ import "leaflet/dist/leaflet.css";
 
 import OpenModal from "@/components/OpenModal.vue";
 
-import { getIconByKey } from "@/helpers/missionConfig";
+import { getIconByKey, getMapByKey } from "@/helpers/missionConfig";
 import { cloneDeep } from "lodash";
 import { Icon } from "leaflet";
 
@@ -111,13 +109,12 @@ export default {
         zoomSnap: 0,
       },
       icons: [],
-      extraPoints: [],
+      extraPoints: 0,
     };
   },
   mounted() {
     this.$refs.map.mapObject.setView([380, 500], -0.25);
     this.icons = this.mission.mapEvents || [];
-    this.extraPoints = this.mission.extraPoints || [];
   },
   methods: {
     iconClicked(icon) {
@@ -134,18 +131,12 @@ export default {
       return getIconByKey(icon);
     },
     extraPointsClicked(extraPoint) {
-      const indexFound = this.extraPoints.findIndex(
-        (point) => point.index === extraPoint.index
-      );
-      const newExtraPoint = {
-        ...extraPoint,
-        enabled: !Boolean(extraPoint.enabled),
-      };
-
-      const newExtraPoints = cloneDeep(this.extraPoints);
-      newExtraPoints[indexFound] = newExtraPoint;
-
-      this.extraPoints = newExtraPoints;
+      this.extraPoints = this.extraPoints + extraPoint.points;
+      M.toast({
+        html: `Added ${extraPoint.points} points`,
+        displayLength: 1050,
+        class: "green darken-1",
+      });
     },
   },
   computed: {
@@ -156,15 +147,12 @@ export default {
           points = icon.points + points;
         }
       });
-      this.extraPoints.forEach((extraPoint) => {
-        if (extraPoint.enabled) {
-          points = extraPoint.points + points;
-        }
-      });
+      points = points + this.extraPoints;
       return `${points}/100`;
     },
     url() {
-      return this.mission.selectedMap.map;
+      const mapIndex = this.mission.selectedMap.index;
+      return getMapByKey(mapIndex) || this.mission.selectedMap.map;
     },
   },
   watch: {
@@ -209,11 +197,7 @@ export default {
 }
 
 .myicon {
-  filter: drop-shadow(0px 0px 2.5px rgba(0, 0, 0, 0.12));
-
-  &.icon-disabled {
-    filter: grayscale(0.95) !important;
-  }
+  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.38));
 }
 
 .extra-points {
@@ -222,12 +206,8 @@ export default {
 
   &-table {
     display: flex;
-    align-items: center;
     justify-content: flex-start;
-
-    .enabled {
-      background: rgba(81, 196, 66, 0.349);
-    }
+    flex-direction: column;
   }
 
   &-title {
@@ -243,6 +223,13 @@ export default {
     border: 3px solid black;
     border-radius: 15px;
     padding: 10px 25px;
+    margin-bottom: 10px;
+    transition: 300ms all;
+    cursor: pointer;
+    &:hover {
+      background: rgba(50, 170, 34, 0.116);
+      transform: scale(0.99);
+    }
   }
 
   &-check-title {
@@ -250,8 +237,25 @@ export default {
     color: black;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    &-badge {
+      padding: 1px 40px;
+      background: rgb(50, 170, 34);
+      color: white;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
+}
+
+.turn-green {
+  border-radius: 100%;
+  padding: 3px;
+  border: 3px solid rgb(36, 165, 53);
+  background: rgb(179, 219, 179);
+  filter: drop-shadow(0px 0px 6.5px rgba(21, 177, 81, 0.568));
 }
 
 [type="checkbox"].filled-in:checked + span:not(.lever):after {

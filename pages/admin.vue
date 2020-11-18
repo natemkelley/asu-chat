@@ -75,7 +75,7 @@ export default {
       this.videoTime = videoTime;
       this.videoPlaybackStatus = videoPlaybackStatus;
       this.percentage = percentage;
-      this.missionData = missions;
+      this.missionData = missions || [];
       this.loaded = true;
     });
   },

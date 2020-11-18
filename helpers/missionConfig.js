@@ -7,6 +7,12 @@ import opening from "@/assets/mapicons/opening.png";
 import stuck from "@/assets/mapicons/stuck.png";
 import reroute from "@/assets/mapicons/reroute.png";
 
+//TODO
+import mission1map from "@/assets/images/mission1map.png";
+import mission2map from "@/assets/images/mission2map.png";
+import mission3map from "@/assets/images/mission3map.png";
+import trainingmap from "@/assets/images/trainingmap.png";
+
 export const missionConfig = [
   {
     missionName: "Training",
@@ -46,4 +52,9 @@ export const mapFromAssets = {
 
 export const getIconByKey = (icon) => {
   return mapFromAssets[icon];
+};
+
+export const getMapByKey = (mapIndex) => {
+  const maps = [mission1map, mission2map, mission3map, trainingmap];
+  return maps[mapIndex - 1];
 };
