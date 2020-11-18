@@ -188,16 +188,12 @@ export default {
   position: relative;
 }
 
-#map {
-  height: 580px;
-}
-
 .filler {
   padding-bottom: 30px;
 }
 
 .myicon {
-  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.38));
+  filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.15));
 }
 
 .extra-points {
@@ -255,13 +251,6 @@ export default {
   padding: 3px;
   border: 3px solid rgb(36, 165, 53);
   background: rgb(179, 219, 179);
-  filter: drop-shadow(0px 0px 6.5px rgba(21, 177, 81, 0.568));
-}
-
-[type="checkbox"].filled-in:checked + span:not(.lever):after {
-  top: 0;
-  border: 2px solid rgb(37, 148, 51);
-  background-color: rgb(38, 166, 55);
-  z-index: 0;
+  filter: drop-shadow(0px 0px 5px rgba(21, 177, 81, 0.25));
 }
 </style>
