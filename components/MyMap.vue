@@ -134,7 +134,7 @@ export default {
       this.extraPoints = this.extraPoints + extraPoint.points;
       M.toast({
         html: `Added ${extraPoint.points} points`,
-        displayLength: 111050,
+        displayLength: 2750,
         classes: "green darken-1",
       });
     },
@@ -148,7 +148,7 @@ export default {
         }
       });
       points = points + this.extraPoints;
-      return `${points}/100`;
+      return `${points}/${this.mission.totalPoints}`;
     },
     url() {
       const mapIndex = this.mission.selectedMap.index;
