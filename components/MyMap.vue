@@ -24,7 +24,8 @@
           <l-icon
             v-if="icon.icon"
             :icon-size="icon.iconSize"
-            :class-name="!icon.disabled ? 'myicon turn-green' : 'myicon'"
+            class="myicon"
+            :class-name="!icon.disabled ? 'turn-green' : ''"
             :icon-url="getIconByKeyMethod(icon.icon)"
           />
         </l-marker>
@@ -123,7 +124,8 @@ export default {
         ...icon,
         disabled: !icon.disabled,
       };
-      let newIcons = cloneDeep(this.icons);
+
+      const newIcons = cloneDeep(this.icons);
       newIcons[foundIconIndex] = newIcon;
       this.icons = newIcons;
     },
