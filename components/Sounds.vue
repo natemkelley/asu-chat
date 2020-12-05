@@ -7,12 +7,12 @@
 
     <div class="sound-icon" @click="playSound(negative)">
       <img :src="horn" />
-      Negative
+      Correct
     </div>
 
     <div class="sound-icon" @click="playSound(timer)">
       <img :src="horn" />
-      Timer
+      Incorrect
     </div>
   </Card>
 </template>
